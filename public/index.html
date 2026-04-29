@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SmartKalk – smarte verktøy for din økonomi</title>
+  <meta name="description" content="Smarte verktøy for lønn, skatt, strøm, lån, privat budsjett, timespris og lønn i ulike yrker." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#hjem" data-page-link="hjem"><span class="brand-mark">S</span><span>SmartKalk</span></a>
+  <nav class="nav">
+    <button class="nav-link active" data-page="hjem" type="button">Hjem</button>
+  </nav>
+</header>
+
+<main>
+  <section id="hjem" class="page active-page">
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">Økonomiverktøy for privatpersoner, freelancere og selvstendige</p>
+        <h1>Smarte verktøy for din økonomi</h1>
+        <p class="lead">Beregn skatt, strøm, lån, privat budsjett, timespris og se veiledende lønn for ulike yrker.</p>
+      </div>
+    </section>
+
+    <section class="section cards-grid center-cards">
+      <article class="panel mini-card">
+        <p class="eyebrow">Privat</p>
+        <h2>Private verktøy</h2>
+        <ul class="feature-list">
+          <li>Skattekalkulator</li>
+          <li>Lønn i ulike yrker</li>
+          <li>Strømkalkulator</li>
+          <li>Lånekalkulator</li>
+          <li>Lag budsjett</li>
+          <li>Lagring / utskrift av budsjett</li>
+        </ul>
+        <button class="btn ghost" data-open-private type="button">Åpne private verktøy</button>
+      </article>
+      <article class="panel mini-card business-card">
+        <div class="business-card-layout">
+          <div class="business-card-copy">
+            <p class="eyebrow">Næring</p>
+            <h2>Næring verktøy</h2>
+            <ul class="feature-list">
+              <li>Skattekalkulator</li>
+              <li>Fradragsoversikt</li>
+              <li>Dokumentasjon jeg trenger</li>
+              <li>Skrive faktura</li>
+              <li>Hva bør jeg ta i timespris?</li>
+              <li>Utskrifter / PDF</li>
+            </ul>
+          </div>
+          <div class="business-card-offer">
+            <p class="offer-title">Kjøp for engangs beløp kr. 199</p>
+            <p class="fineprint">Ingen abonnement, betal og bruk</p>
+            <button class="btn ghost" data-open-business type="button">Åpne næringsverktøy</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+  </section>
+
+  <section id="kalkulatorer" class="page">
+    <section class="page-head">
+      <p class="eyebrow" id="toolPageEyebrow">Private verktøy</p>
+      <h1 id="toolPageTitle">Private verktøy</h1>
+    </section>
+
+    <nav class="subtabs private-tabs">
+      <button class="subtab active" data-tab-group="calc" data-tab="lonnskatt" type="button">Lønn/skatt</button>
+      <button class="subtab" data-tab-group="calc" data-tab="strom" type="button">Strøm</button>
+      <button class="subtab" data-tab-group="calc" data-tab="lan" type="button">Lån</button>
+      <button class="subtab" data-tab-group="calc" data-tab="yrkeslonn" type="button">Snitt ulike yrker</button>
+      <button class="subtab" data-tab-group="calc" data-tab="budget" type="button">Lag et budsjett</button>
+      <button class="subtab premium-tab business-tab-button" data-tab-group="calc" data-tab="selvstendig" type="button">Næring</button>
+    </nav>
+
+    <section id="tab-lonnskatt" class="tab-panel active-tab" data-tab-panel="calc">
+        <div class="calculator-layout">
+          <div class="panel input-panel">
+            <div class="section-title"><h2>Skatt for lønnsmottaker 2025</h2></div>
+            <form class="form">
+              <fieldset><legend>Inntekt</legend>
+                <label>Brutto årsinntekt<input type="number" id="empGrossIncome" min="0" step="1000" value="650000"></label>
+                <label>Kapitalinntekter/renteinntekter<input type="number" id="empCapitalIncome" min="0" step="500" value="0"></label>
+              </fieldset>
+              <fieldset><legend>Fradrag</legend>
+                <p class="info-help-text">Klikke på info for utfyllende hjelp til riktig beløp</p>
+                <label>Reisefradrag hjem-arbeid<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Her kan du regne beløp som overstiger kr. 14000 pr år dersom du har reisevei t/r som er over 27 km. Da regnes det en sats på 1.90 kr pr km uansett transportmiddel. Bom og ferje kan taes med dersom det sparer deg min 2 timer i reisetid</span></span><input type="number" id="empTravelDeduction" min="0" step="500" value="0"></label>
+                <label>Gjeldsrenter/renteutgifter<input type="number" id="empInterestDeduction" min="0" step="500" value="0"></label>
+                <label>IPS / pensjonssparing<input type="number" id="empIpsDeduction" min="0" step="500" value="0"></label>
+                <label>Fagforeningskontingent<input type="number" id="empUnionDeduction" min="0" step="500" value="0"></label>
+                <label>Foreldrefradrag/barnepass<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Fradraget gis i alminnelig inntekt med inntil 15 000 kroner for ett barn og med inntil 10 000 kroner for hvert ytterligere barn.
+
+For barn 12 år og eldre med særskilt behov for omsorg og pleie videreføres grensene på 25 000 kroner for ett barn, og 15 000 kroner per barn utover det første</span></span><input type="number" id="empChildcareDeduction" min="0" step="500" value="0"></label>
+                <label>Annet fradrag<input type="number" id="empOtherDeduction" min="0" step="500" value="0"></label>
+                <p class="fineprint form-note">Formue er ikke tatt med her</p>
+              </fieldset>
+            </form>
+          </div>
+          <aside class="panel result-panel"><div class="section-title"><p class="eyebrow">Resultat</p><h2>Detaljert beregning</h2></div><div id="employeeTaxResult"></div></aside>
+        </div>
+      </section>
+
+    <section id="tab-yrkeslonn" class="tab-panel" data-tab-panel="calc">
+        <div class="calculator-layout">
+          <div class="panel">
+            <div class="section-title">
+              <p class="eyebrow">Lønn</p>
+              <h2>Snitt lønn for ulike yrker</h2>
+              <p>Skriv inn yrke, velg korrekt treff fra listen, og få veiledende årslønn.</p>
+              <p class="fineprint">Evt individuelle tillegg kan påvirke lønnen.</p>
+            </div>
+            <label class="wide-label">Yrke<input type="text" id="salarySearch" placeholder="For eksempel frisør, drosje, taxi, forsikring, bilmekaniker"></label>
+          </div>
+          <aside class="panel result-panel"><div class="section-title"><p class="eyebrow">Resultat</p><h2>Årslønn</h2></div><div id="salaryResult"></div></aside>
+        </div>
+      </section>
+
+    <section id="tab-selvstendig" class="tab-panel" data-tab-panel="calc">
+        <nav class="subtabs nested">
+          <button class="subtab active" data-tab-group="biz" data-tab="bizskatt" type="button">Skatt</button>
+          <button class="subtab" data-tab-group="biz" data-tab="timespris" type="button">Min timespris?</button>
+          <button class="subtab" data-tab-group="biz" data-tab="faktura" type="button">Faktura</button>
+        </nav>
+
+        <div id="businessPremiumContent" class="premium-locked-area">
+          <section id="tab-bizskatt" class="tab-panel active-tab" data-tab-panel="biz">
+            <div class="calculator-layout">
+              <div class="panel input-panel">
+                <div class="section-title"><p class="eyebrow">Næring</p><h2>Skatteberegning næring</h2><p>Alle næringstall bør føres eks. mva.</p><p class="info-help-text">Klikke på info for utfyllende hjelp til riktig beløp</p></div>
+                <form class="form">
+                  <fieldset><legend>Inntekter</legend>
+                    <label>Omsetning<input type="number" id="bizRevenue" min="0" step="1000" value="600000"></label>
+                    <label>Eventuell lønnsinntekt ved siden av<input type="number" id="bizSalary" min="0" step="1000" value="0"></label>
+                    <label>Kapitalinntekter/renteinntekter<input type="number" id="bizCapitalIncome" min="0" step="1000" value="0"></label>
+                  </fieldset>
+                  <fieldset><legend>Næringskostnader</legend>
+                    <label>Utstyr, tjenester, arbeidsklær, verktøy, rekvisita osv<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Her kan du regne hele beløpet for alt av utstyr og innkjøp som brukes mer enn 50% i bedriften. Innkjøp av PC til bedriften. Tjenester for underleverandører, håndverkere innleid og lignende. Klær som er arbeidsklær og ikke beregnet for privat bruk. Regnskapsfører eller regnskapsprogram</span></span><input type="number" id="bizCostEquipmentServices" min="0" step="500" value="0"></label>
+                    <label>Mobil og internett<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Kjøp av mobil kan du ikke regne her. Bruk av mobilen og kostnad internett kan regnes med alt som overstiger kr 4.392,- pr år</span></span><input type="number" id="bizCostPhoneInternet" min="0" step="500" value="0"></label>
+                    <label>Husleie<input type="number" id="bizCostRent" min="0" step="500" value="0"></label>
+                    <label>Mat på reise<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Mat og drikke på reise, kan regnes med hele beløpet. Kan også ta med kjøp av alkoholholdig drikke som serveres som del av måltidet, men ikke brennevin.</span></span><input type="number" id="bizCostFoodTravel" min="0" step="500" value="0"></label>
+                    <label>Mat og drikke representasjon<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Beløp som kan regnes her er maks 592,- pr person hvis det serveres utenfor ditt arbeidssted. Igjen ikke ta med brennevin.</span></span><input type="number" id="bizCostRepresentation" min="0" step="500" value="0"></label>
+                    <label>Overnatting reise, reisekostnader<input type="number" id="bizCostTravelLodging" min="0" step="500" value="0"></label>
+                    <label>Kjøregodtgjørelse<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Du kan regne kr. 3,50 pr km som kjøres i forbindelse med arbeid og oppdrag dersom du kjører med privat bil og ikke firmabil. Trenger ikke være din egen bil, men en privat bil. Lurt å ha en kjørebok som holder oversikt. Dette gjelder hvis du kjører under 6000 km. Dersom du kjører mer enn dette, så regner du her de faktiske utgiftene inkludert drivstoff, vedlikehold, forsikring, reparasjoner osv.</span></span><input type="number" id="bizCostMileage" min="0" step="500" value="0"></label>
+                    <label>Andre bilutgifter<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Utgifter til bom, parkering, ferje, piggdekkavgift</span></span><input type="number" id="bizCostCarOther" min="0" step="500" value="0"></label>
+                    <label>Software, programmer, reklame<input type="number" id="bizCostSoftwareAds" min="0" step="500" value="0"></label>
+                    <label>Utgift ansatte<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Gaver til ansatte med inntil kr. 5000 pr år. Utgifter ellers her er til julebord, sosiale events, alt for å øke trivsel i bedriften</span></span><input type="number" id="bizCostEmployees" min="0" step="500" value="0"></label>
+                  </fieldset>
+                  <fieldset><legend>Private/personlige fradrag</legend>
+                    <label>Gjeldsrenter/renteutgifter<input type="number" id="bizDedInterest" min="0" step="500" value="0"></label>
+                    <label>Reisefradrag hjem-arbeid<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Her kan du regne beløp som overstiger kr. 14000 pr år dersom du har reisevei t/r som er over 27 km. Da regnes det en sats på 1.90 kr pr km uansett transportmiddel. Bom og ferje kan taes med dersom det sparer deg min 2 timer i reisetid</span></span><input type="number" id="bizDedTravel" min="0" step="500" value="0"></label>
+                    <label>Fagforening / yrkesorganisasjon<input type="number" id="bizDedUnion" min="0" step="500" value="0"></label>
+                    <label>IPS / pensjonssparing<input type="number" id="bizDedIps" min="0" step="500" value="0"></label>
+                    <label>Foreldrefradrag/barnepass<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Fradraget gis i alminnelig inntekt med inntil 15 000 kroner for ett barn og med inntil 10 000 kroner for hvert ytterligere barn.
+
+For barn 12 år og eldre med særskilt behov for omsorg og pleie videreføres grensene på 25 000 kroner for ett barn, og 15 000 kroner per barn utover det første</span></span><input type="number" id="bizDedChildcare" min="0" step="500" value="0"></label>
+                    <label>Andre fradrag<input type="number" id="bizDedOther" min="0" step="500" value="0"></label>
+                    <p class="fineprint form-note">Avskrivinger og formue er ikke tatt med her</p>
+                  </fieldset>
+                  <div class="form-actions"><button class="btn secondary" id="printBizMain" type="button">Utskrift / PDF</button><button class="btn ghost" id="saveBizScenario" type="button">Lagre i nettleser</button><button class="btn ghost" id="downloadBizMain" type="button">Lagre på din enhet (PDF)</button></div>
+                </form>
+              </div>
+              <aside class="panel result-panel">
+                <div class="section-title"><p class="eyebrow">Resultat</p><h2>Oppsummert skatt</h2></div>
+                <div id="businessTaxResult"></div>
+              </aside>
+            </div>
+
+            <section class="premium-grid section">
+              <article class="panel">
+                <p class="eyebrow">Detaljert oversikt</p><h2>Skatteberegning punkt for punkt</h2>
+                <div id="businessPremiumReport"></div>
+                <div class="form-actions"><button class="btn secondary" id="printBizReport" type="button">Utskrift / PDF</button><button class="btn ghost" id="saveBizScenarioAlt" type="button">Lagre i nettleser</button><button class="btn ghost" id="downloadBizPdf" type="button">Lagre på din enhet (PDF)</button></div>
+              </article>
+              <article class="panel"><p class="eyebrow">Huskeliste</p><h2>Dokumentasjon</h2><div id="businessDocChecklist"></div></article>
+              <article class="panel"><p class="eyebrow">Fradrag</p><h2>Vanlige fradrag i næring</h2><ul class="checklist"><li>Regnskapsprogram og regnskapsfører</li><li>Programvare, abonnementer og digitale verktøy</li><li>PC, mobil, kamera, kontorutstyr og annet arbeidsutstyr</li><li>Telefon og internett – næringsandel</li><li>Markedsføring, annonser og salgsverktøy</li><li>Kurs, kompetanse og faglig oppdatering</li><li>Reise, transport, parkering, bom og overnatting</li><li>Forsikringer knyttet til virksomheten</li><li>Bankgebyrer, betalingsløsninger og finansielle kostnader</li><li>Kontor, coworking, hjemmekontor etter gjeldende vilkår</li><li>Varer, materiell og produksjonskostnader</li><li>Anleggsmidler som må avskrives over tid</li></ul></article>
+              <article class="panel"><p class="eyebrow">Lokalt</p><h2>Lagrede scenarier</h2><div id="savedBizScenarios" class="saved-list"></div></article>
+            </section>
+          </section>
+
+          <section id="tab-timespris" class="tab-panel" data-tab-panel="biz">
+            <div class="calculator-layout">
+              <div class="panel input-panel">
+                <div class="section-title"><p class="eyebrow">Næring</p><h2>Min timespris?</h2><p>Beregn anbefalt timespris eks. mva.</p></div>
+                <form class="form">
+                  <fieldset><legend>Grunnlag</legend>
+                    <label>Ønsket inntekt per år<input type="number" id="hourDesiredIncome" min="0" step="1000" value="650000"></label>
+                    <label>Feriedager per år<input type="number" id="hourVacationDays" min="0" step="1" value="25"></label>
+                    <label>Fakturerbare timer per uke<input type="number" id="hourWeeklyHours" min="1" step="1" value="25"></label>
+                  </fieldset>
+                  <fieldset><legend>Driftskostnader per år</legend>
+                    <label>Drivstoff<input type="number" id="hourFuel" min="0" step="500" value="12000"></label>
+                    <label>Reise<input type="number" id="hourTravel" min="0" step="500" value="10000"></label>
+                    <label>Møtevirksomhet<input type="number" id="hourMeetings" min="0" step="500" value="5000"></label>
+                    <label>Innkjøp<input type="number" id="hourPurchases" min="0" step="500" value="15000"></label>
+                    <label>Anleggsmidler<input type="number" id="hourAssets" min="0" step="500" value="20000"></label>
+                    <label>Finanskostnader<input type="number" id="hourFinance" min="0" step="500" value="5000"></label>
+                    <label>Pensjon<input type="number" id="hourPension" min="0" step="500" value="40000"></label>
+                    <label>Sykepenger<input type="number" id="hourSickPay" min="0" step="500" value="25000"></label>
+                    <label>Forsikringer<input type="number" id="hourInsurance" min="0" step="500" value="12000"></label>
+                    <label>Annet<input type="number" id="hourOther" min="0" step="500" value="15000"></label>
+                  </fieldset>
+                </form>
+              </div>
+              <aside class="panel result-panel"><div class="section-title"><p class="eyebrow">Resultat</p><h2>Anbefalt timespris eks. mva</h2></div><div id="hourlyResult"></div></aside>
+            </div>
+          </section>
+
+          <section id="tab-faktura" class="tab-panel" data-tab-panel="biz">
+            <div class="calculator-layout invoice-layout">
+              <div class="panel input-panel">
+                <div class="section-title"><p class="eyebrow">Næring</p><h2>Faktura</h2><p>Lag enkel faktura med lokale firmaopplysninger, automatisk fakturanummer og summering eks. mva.</p></div>
+                <form class="form" id="invoiceForm">
+                  <fieldset class="invoice-fieldset">
+                    <div class="invoice-fieldset-title">Egne firmaopplysninger</div>
+                    <label>Firmanavn<input type="text" id="invCompanyName" autocomplete="organization"></label>
+                    <label>Adresse<input type="text" id="invCompanyAddress" autocomplete="street-address"></label>
+                    <label>E-post<input type="email" id="invCompanyEmail" autocomplete="email"></label>
+                    <label>Kontonummer<input type="text" id="invCompanyAccount" inputmode="numeric"></label>
+                    <label class="checkbox-label"><input type="checkbox" id="invCompanyDefault"> Bruk som standard</label>
+                  </fieldset>
+                  <fieldset class="invoice-fieldset">
+                    <div class="invoice-fieldset-title">Mottaker</div>
+                    <label>Mottaker navn<input type="text" id="invRecipientName" autocomplete="organization"></label>
+                    <label>Mottaker adresse<input type="text" id="invRecipientAddress" autocomplete="street-address"></label>
+                    <label>Mottaker postnr<input type="text" id="invRecipientPostal" autocomplete="postal-code"></label>
+                    <label>Mottaker epost<input type="email" id="invRecipientEmail" placeholder="kunde@eksempel.no" autocomplete="email"></label>
+                  </fieldset>
+                  <fieldset class="invoice-fieldset invoice-meta-fieldset">
+                    <div class="invoice-fieldset-title">Fakturaopplysninger</div>
+                    <label>Fakturanummer<input type="text" id="invNumber" readonly></label>
+                    <label>Fakturadato<input type="date" id="invDate"></label>
+                    <label>Betalingsfrist<input type="date" id="invDueDate"></label>
+                  </fieldset>
+                  <fieldset class="invoice-fieldset invoice-lines-fieldset"><div class="invoice-fieldset-title">Fakturalinjer</div>
+                    <div class="invoice-lines-header"><span>Beskrivelse</span><span>Antall</span><span>Pris eks. mva</span><span>Mva %</span><span></span></div>
+                    <div id="invoiceLines" class="invoice-lines"></div>
+                    <div class="form-actions"><button class="btn ghost" id="addInvoiceLine" type="button">Legg til linje</button></div>
+                  </fieldset>
+                  <div class="form-actions invoice-save-actions">
+                    <button class="btn secondary" id="printInvoice" type="button">Utskrift / PDF</button>
+                    <button class="btn ghost" id="saveInvoice" type="button">Lagre i nettleser</button>
+                    <button class="btn ghost" id="downloadInvoice" type="button">Lagre på din enhet (PDF)</button>
+                  </div>
+                </form>
+              </div>
+              <aside class="panel result-panel invoice-preview-panel">
+                <div class="section-title"><p class="eyebrow">Forhåndsvisning</p><h2>Faktura</h2></div>
+                <div id="invoicePreview"></div>
+              </aside>
+            </div>
+            <section class="premium-grid section">
+              <article class="panel"><p class="eyebrow">Lokalt</p><h2>Lagrede fakturaer</h2><div id="savedInvoices" class="saved-list"></div></article>
+            </section>
+          </section>
+        </div>
+      </section>
+
+    <section id="tab-strom" class="tab-panel" data-tab-panel="calc">
+      <div class="calculator-layout">
+        <div class="panel input-panel"><div class="section-title"><p class="eyebrow">Strøm</p><h2>Strømkalkulator</h2></div><form class="form"><fieldset><legend>Strøm</legend><label>Årsforbruk kWh<input type="number" id="powerYearKwh" min="0" step="100" value="16000"></label><label>Strømpris kr/kWh<input type="number" id="powerPrice" min="0" step="0.01" value="1.25"></label><label>Nettleie/fastbeløp per måned<input type="number" id="powerGridMonthly" min="0" step="10" value="650"></label></fieldset></form></div>
+        <aside class="panel result-panel"><div class="section-title"><p class="eyebrow">Resultat</p><h2>Månedlig strømestimat</h2></div><div id="powerResult"></div></aside>
+      </div>
+    </section>
+
+    <section id="tab-lan" class="tab-panel" data-tab-panel="calc">
+      <div class="calculator-layout">
+        <div class="panel input-panel"><div class="section-title"><p class="eyebrow">Lån</p><h2>Lånekalkulator</h2></div><form class="form"><fieldset><legend>Lån</legend><label>Lånebeløp<input type="number" id="loanAmount" min="0" step="10000" value="3000000"></label><label>Løpetid i år<input type="number" id="loanYears" min="1" step="1" value="25"></label><label>Lånerente %<input type="number" id="loanRate" min="0" step="0.1" value="5.5"></label></fieldset></form></div>
+        <aside class="panel result-panel"><div class="section-title"><p class="eyebrow">Resultat</p><h2>Månedlig lånekostnad</h2></div><div id="loanResult"></div></aside>
+      </div>
+    </section>
+  
+
+    <section id="tab-budget" class="tab-panel" data-tab-panel="calc">
+      <section class="page-head inner-page-head"><p class="eyebrow">Budsjett privat</p><h1>Lag et budsjett</h1></section>
+      <section class="calculator-layout">
+      <div class="panel"><div class="section-title"><p class="eyebrow">Inntekter og utgifter</p><h2>Månedsbudsjett</h2></div><div class="budget-table-wrap"><table class="budget-table"><thead><tr><th>Kategori</th><th>Type</th><th>Beløp</th></tr></thead><tbody id="budgetRows"></tbody></table></div></div>
+      <aside class="panel result-panel"><div class="section-title"><p class="eyebrow">Resultat</p><h2>Oppsummering</h2></div><div id="budgetResult"></div><div class="form-actions budget-actions"><button class="btn secondary" id="printBudget" type="button">Utskrift / PDF</button><button class="btn ghost" id="saveBudget" type="button">Lagre i nettleser</button><button class="btn ghost" id="downloadBudgetPdf" type="button">Lagre på din enhet (PDF)</button></div><div id="budgetSaveStatus" class="fineprint"></div></aside>
+    </section>
+  
+    </section>
+  </section>
+
+  <section class="section legal"><h2>Ansvarsfraskrivelse</h2><p>SmartKalk gir kun estimater og generell informasjon. Tjenesten erstatter ikke rådgivning fra Skatteetaten, regnskapsfører, revisor, advokat, bank eller annen kvalifisert rådgiver. Faktiske tall kan avvike.</p></section>
+</main>
+
+<div id="paywallModal" class="modal hidden"><div class="modal-card"><button id="closeModal" class="modal-close" type="button">×</button><p class="eyebrow">Næring</p><h2>Lås opp næringsverktøy</h2><p>Gir tilgang til skatteberegning næring, timespris, faktura, rapport, PDF, CSV, lokal lagring og dokumentasjonshuskelister.</p><div class="price small">199 kr</div><button id="modalUnlock" class="btn primary" type="button">Kjøp tilgang 199 kr</button><p class="fineprint">Betaling håndteres sikkert med Stripe Checkout.</p></div></div>
+<footer class="footer"><p>© 2026 SmartKalk</p><p>Økonomiportal-prototype.</p></footer>
+<script src="salary-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
