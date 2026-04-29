@@ -1375,3 +1375,32 @@ body:not(.premium-unlocked) #tab-selvstendig::after {
 #tab-lonnskatt label {
   overflow: visible;
 }
+
+
+/* v27: SEO guide links on front page */
+.seo-guide-links {
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.guide-link-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.guide-link-grid a {
+  display: block;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255,255,255,.94);
+  color: var(--primary-2);
+  font-weight: 850;
+  text-decoration: none;
+}
+.guide-link-grid a:hover {
+  background: #e7f7f3;
+}
+@media (max-width: 760px) {
+  .guide-link-grid { grid-template-columns: 1fr; }
+}

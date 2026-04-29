@@ -69,16 +69,15 @@ async function verifyCheckoutFromUrl(){
     if (data.premium && data.token) {
       localStorage.setItem("smartkalk_premium_token", data.token);
       localStorage.setItem("smartkalk_premium_199", "true");
+      updatePremium();
+      closeModal();
+      openBusinessTools();
+      switchTab("biz", "bizskatt");
 
-updatePremium();
-closeModal();
-openBusinessTools();
-switchTab("biz", "bizskatt");
-
-params.delete("session_id");
-const cleanUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}#kalkulatorer`;
-window.history.replaceState({}, document.title, cleanUrl);
-alert("Næringsverktøy er åpnet. Takk for kjøpet!");
+      params.delete("session_id");
+      const cleanUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}#kalkulatorer`;
+      window.history.replaceState({}, document.title, cleanUrl);
+      alert("Næringsverktøy er åpnet. Takk for kjøpet!");
     }
   } catch (error) {
     alert("Betaling ble gjennomført, men kunne ikke verifiseres automatisk. Prøv å laste siden på nytt.");
@@ -90,6 +89,7 @@ function devUnlockPremium(){
   updatePremium();
   closeModal();
 }
+
 const unlockPremiumBtn=document.getElementById("unlockPremium");
 if(unlockPremiumBtn)unlockPremiumBtn.addEventListener("click",startPremiumCheckout);
 document.getElementById("modalUnlock").addEventListener("click",startPremiumCheckout);
@@ -231,4 +231,4 @@ function salarySearch(){
 
 document.getElementById("salarySearch").addEventListener("input",salarySearch);
 
-setToolMode("private");if(location.hash){const h=location.hash.replace("#","");if(document.getElementById(h)?.classList.contains("page"))switchPage(h)}empTax();updateBiz();updatePremium();renderSaved();calcHourly();calcPower();calcLoan();initBudget();calcBudget();initInvoice();salarySearch();
+function handleInitialNavigation(){const params=new URLSearchParams(window.location.search);const tool=params.get("tool");const tab=params.get("tab");const bizTab=params.get("biz");setToolMode("private");if(location.hash){const h=location.hash.replace("#","");if(document.getElementById(h)?.classList.contains("page"))switchPage(h)}if(tool==="business"){openBusinessTools();if(bizTab)switchTab("biz",bizTab)}else if(tool==="private"){openPrivateTools();if(tab)switchTab("calc",tab)}}handleInitialNavigation();empTax();updateBiz();updatePremium();renderSaved();calcHourly();calcPower();calcLoan();initBudget();calcBudget();initInvoice();salarySearch();
