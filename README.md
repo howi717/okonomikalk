@@ -1,4 +1,4 @@
-# SmartKalk økonomiportal v15
+# okonomikalk 
 
 Dette er en betalingsklar prototype.
 
