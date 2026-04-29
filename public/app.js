@@ -69,13 +69,16 @@ async function verifyCheckoutFromUrl(){
     if (data.premium && data.token) {
       localStorage.setItem("smartkalk_premium_token", data.token);
       localStorage.setItem("smartkalk_premium_199", "true");
-      updatePremium();
-      closeModal();
 
-      params.delete("session_id");
-      const cleanUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}${window.location.hash || "#kalkulatorer"}`;
-      window.history.replaceState({}, document.title, cleanUrl);
-      alert("Næringsverktøy er åpnet. Takk for kjøpet!");
+updatePremium();
+closeModal();
+openBusinessTools();
+switchTab("biz", "bizskatt");
+
+params.delete("session_id");
+const cleanUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}#kalkulatorer`;
+window.history.replaceState({}, document.title, cleanUrl);
+alert("Næringsverktøy er åpnet. Takk for kjøpet!");
     }
   } catch (error) {
     alert("Betaling ble gjennomført, men kunne ikke verifiseres automatisk. Prøv å laste siden på nytt.");
@@ -87,7 +90,6 @@ function devUnlockPremium(){
   updatePremium();
   closeModal();
 }
-
 const unlockPremiumBtn=document.getElementById("unlockPremium");
 if(unlockPremiumBtn)unlockPremiumBtn.addEventListener("click",startPremiumCheckout);
 document.getElementById("modalUnlock").addEventListener("click",startPremiumCheckout);
