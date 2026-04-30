@@ -18,8 +18,6 @@ const SITE_LOCK_PASSWORD = process.env.SITE_LOCK_PASSWORD || "";
 
 function siteLock(req, res, next) {
   if (!SITE_LOCK_ENABLED) return next();
-
-  // La Stripe webhook slippe gjennom hvis du senere bruker webhook.
   if (req.path === "/api/stripe-webhook") return next();
 
   const auth = req.headers.authorization || "";
@@ -27,10 +25,7 @@ function siteLock(req, res, next) {
 
   if (scheme === "Basic" && encoded) {
     const [user, pass] = Buffer.from(encoded, "base64").toString().split(":");
-
-    if (user === SITE_LOCK_USER && pass === SITE_LOCK_PASSWORD) {
-      return next();
-    }
+    if (user === SITE_LOCK_USER && pass === SITE_LOCK_PASSWORD) return next();
   }
 
   res.setHeader("WWW-Authenticate", 'Basic realm="OkonomiKalk test"');
@@ -48,11 +43,54 @@ const PREMIUM_TOKEN_SECRET = process.env.PREMIUM_TOKEN_SECRET || "change-this-se
 
 const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
 
-function makePremiumToken(sessionId) {
+function signValue(value) {
   return crypto
     .createHmac("sha256", PREMIUM_TOKEN_SECRET)
-    .update(String(sessionId))
+    .update(String(value))
     .digest("hex");
+}
+
+function makePremiumToken(value) {
+  return signValue(value);
+}
+
+function base64UrlEncode(value) {
+  return Buffer.from(String(value), "utf8").toString("base64url");
+}
+
+function base64UrlDecode(value) {
+  return Buffer.from(String(value), "base64url").toString("utf8");
+}
+
+function makeLicenseCode(sessionId) {
+  const payload = JSON.stringify({
+    v: 1,
+    product: "okonomikalk_naering_199",
+    sessionId: String(sessionId),
+    issuedAt: new Date().toISOString()
+  });
+  const encodedPayload = base64UrlEncode(payload);
+  const signature = signValue(encodedPayload).slice(0, 32);
+  return `OK1.${encodedPayload}.${signature}`;
+}
+
+function verifyLicenseCode(code) {
+  const normalized = String(code || "").trim();
+  const parts = normalized.split(".");
+  if (parts.length !== 3 || parts[0] !== "OK1") return null;
+
+  const [, encodedPayload, signature] = parts;
+  const expected = signValue(encodedPayload).slice(0, 32);
+  if (signature !== expected) return null;
+
+  try {
+    const payload = JSON.parse(base64UrlDecode(encodedPayload));
+    if (payload.product !== "okonomikalk_naering_199") return null;
+    if (!payload.sessionId) return null;
+    return payload;
+  } catch {
+    return null;
+  }
 }
 
 // Stripe webhook must use raw body.
@@ -107,8 +145,8 @@ app.post("/api/create-checkout-session", async (req, res) => {
           price_data: {
             currency: "nok",
             product_data: {
-              name: "SmartKalk Premium",
-              description: "Engangstilgang til skatteberegning for selvstendig næringsdrivende, rapport, CSV og timespris."
+              name: "ØkonomiKalk Næring",
+              description: "Engangstilgang til næringsverktøy: skatteberegning, fradrag, timespris, faktura, rapport og PDF."
             },
             unit_amount: 19900
           },
@@ -118,7 +156,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
       success_url: `${PUBLIC_URL}/?session_id={CHECKOUT_SESSION_ID}#kalkulatorer`,
       cancel_url: `${PUBLIC_URL}/#kalkulatorer`,
       metadata: {
-        product: "smartkalk_premium_199"
+        product: "okonomikalk_naering_199"
       }
     });
 
@@ -142,10 +180,12 @@ app.get("/api/verify-session", async (req, res) => {
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-    if (session.payment_status === "paid" && session.metadata?.product === "smartkalk_premium_199") {
+    if (session.payment_status === "paid" && session.metadata?.product === "okonomikalk_naering_199") {
+      const licenseCode = makeLicenseCode(session.id);
       return res.json({
         premium: true,
-        token: makePremiumToken(session.id)
+        token: makePremiumToken(session.id),
+        licenseCode
       });
     }
 
@@ -156,10 +196,26 @@ app.get("/api/verify-session", async (req, res) => {
   }
 });
 
+
+app.post("/api/verify-license", (req, res) => {
+  const licenseCode = req.body?.licenseCode;
+  const license = verifyLicenseCode(licenseCode);
+
+  if (!license) {
+    return res.status(401).json({ ok: false, error: "Ugyldig lisenskode." });
+  }
+
+  return res.json({
+    ok: true,
+    premium: true,
+    token: makePremiumToken(`${license.sessionId}:${license.issuedAt}`)
+  });
+});
+
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, app: "smartkalk", version: "v15" });
+  res.json({ ok: true, app: "okonomikalk", version: "v34" });
 });
 
 app.listen(PORT, () => {
-  console.log(`SmartKalk v15 running on ${PUBLIC_URL}`);
+  console.log(`ØkonomiKalk v34 running on ${PUBLIC_URL}`);
 });

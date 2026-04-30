@@ -37,7 +37,7 @@ async function startPremiumCheckout(){
     const response = await fetch("/api/create-checkout-session", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ product: "smartkalk_premium_199" })
+      body: JSON.stringify({ product: "okonomikalk_naering_199" })
     });
 
     if (!response.ok) {
@@ -69,6 +69,7 @@ async function verifyCheckoutFromUrl(){
     if (data.premium && data.token) {
       localStorage.setItem("smartkalk_premium_token", data.token);
       localStorage.setItem("smartkalk_premium_199", "true");
+      if (data.licenseCode) localStorage.setItem("okonomikalk_license_code", data.licenseCode);
       updatePremium();
       closeModal();
       openBusinessTools();
@@ -77,10 +78,48 @@ async function verifyCheckoutFromUrl(){
       params.delete("session_id");
       const cleanUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}#kalkulatorer`;
       window.history.replaceState({}, document.title, cleanUrl);
-      alert("Næringsverktøy er åpnet. Takk for kjøpet!");
+      if (data.licenseCode) showLicenseNotice(data.licenseCode);
+      else alert("Næringsverktøy er åpnet. Takk for kjøpet!");
     }
   } catch (error) {
     alert("Betaling ble gjennomført, men kunne ikke verifiseres automatisk. Prøv å laste siden på nytt.");
+  }
+}
+
+
+function showLicenseNotice(licenseCode){
+  let box=document.getElementById("licenseNotice");
+  if(!box){
+    box=document.createElement("div");
+    box.id="licenseNotice";
+    box.className="license-notice";
+    document.body.appendChild(box);
+  }
+  box.innerHTML=`<div class="license-notice-card"><button class="modal-close" id="closeLicenseNotice" type="button">×</button><p class="eyebrow">Takk for kjøpet</p><h2>Næringsverktøy er åpnet</h2><p>Ta vare på lisenskoden. Den kan brukes for å åpne næringsverktøy på mobil, nettbrett eller en annen nettleser.</p><textarea readonly>${licenseCode}</textarea><div class="form-actions"><button class="btn primary" id="copyLicenseCode" type="button">Kopier lisenskode</button><button class="btn ghost" id="continueAfterLicense" type="button">Fortsett</button></div><p class="fineprint">Koden lagres også lokalt i denne nettleseren.</p></div>`;
+  box.classList.remove("hidden");
+  document.getElementById("closeLicenseNotice").addEventListener("click",()=>box.classList.add("hidden"));
+  document.getElementById("continueAfterLicense").addEventListener("click",()=>box.classList.add("hidden"));
+  document.getElementById("copyLicenseCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(licenseCode);alert("Lisenskoden er kopiert.")}catch{alert("Kopier lisenskoden manuelt.")}});
+}
+
+async function unlockWithLicense(){
+  const input=document.getElementById("licenseCodeInput");
+  const status=document.getElementById("licenseStatus");
+  const licenseCode=(input?.value||"").trim();
+  if(!licenseCode){if(status)status.textContent="Lim inn lisenskoden først.";return}
+  try{
+    const response=await fetch("/api/verify-license",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({licenseCode})});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||!data.premium||!data.token)throw new Error(data.error||"Ugyldig lisenskode.");
+    localStorage.setItem("smartkalk_premium_token",data.token);
+    localStorage.setItem("smartkalk_premium_199","true");
+    localStorage.setItem("okonomikalk_license_code",licenseCode);
+    updatePremium();
+    closeModal();
+    openBusinessTools();
+    switchTab("biz","bizskatt");
+  }catch(error){
+    if(status)status.textContent="Lisenskoden ble ikke godkjent. Sjekk at hele koden er limt inn.";
   }
 }
 
@@ -93,6 +132,7 @@ function devUnlockPremium(){
 const unlockPremiumBtn=document.getElementById("unlockPremium");
 if(unlockPremiumBtn)unlockPremiumBtn.addEventListener("click",startPremiumCheckout);
 document.getElementById("modalUnlock").addEventListener("click",startPremiumCheckout);
+document.getElementById("licenseUnlock").addEventListener("click",unlockWithLicense);
 document.getElementById("closeModal").addEventListener("click",closeModal);
 document.getElementById("paywallModal").addEventListener("click",e=>{if(e.target.id==="paywallModal")closeModal()});
 document.getElementById("tab-selvstendig").addEventListener("click",()=>{if(!isPremium())openModal()});
@@ -128,9 +168,10 @@ function getSavedInvoices(){try{return JSON.parse(localStorage.getItem("smartkal
 function setSavedInvoices(items){localStorage.setItem("smartkalk_saved_invoices",JSON.stringify(items))}
 function renderSavedInvoices(){const c=document.getElementById("savedInvoices"),items=getSavedInvoices();if(!items.length){c.innerHTML="<p>Ingen lagrede fakturaer ennå.</p>";return}c.innerHTML=items.map((x,i)=>`<div class="saved-item"><strong>${esc(x.number)} · ${esc(x.recipient?.name||x.recipientEmail||"Mottaker mangler")}</strong><p>${esc(x.date)} · Forfall ${esc(x.due)} · Total ${kr(x.total)}</p><button class="btn ghost" data-load-invoice="${i}" type="button">Hent opp</button> <button class="btn ghost" data-delete-invoice="${i}" type="button">Slett</button></div>`).join("");c.querySelectorAll("[data-delete-invoice]").forEach(b=>b.addEventListener("click",()=>{setSavedInvoices(getSavedInvoices().filter((_,i)=>i!=Number(b.dataset.deleteInvoice)));renderSavedInvoices()}));c.querySelectorAll("[data-load-invoice]").forEach(b=>b.addEventListener("click",()=>loadInvoice(getSavedInvoices()[Number(b.dataset.loadInvoice)])))}
 function loadInvoice(inv){if(!inv)return;document.getElementById("invCompanyName").value=inv.company?.name||"";document.getElementById("invCompanyAddress").value=inv.company?.address||"";document.getElementById("invCompanyEmail").value=inv.company?.email||"";document.getElementById("invCompanyAccount").value=inv.company?.account||"";document.getElementById("invRecipientName").value=inv.recipient?.name||"";document.getElementById("invRecipientAddress").value=inv.recipient?.address||"";document.getElementById("invRecipientPostal").value=inv.recipient?.postal||"";document.getElementById("invRecipientEmail").value=inv.recipient?.email||inv.recipientEmail||"";document.getElementById("invDate").value=inv.date||todayIso();document.getElementById("invDueDate").value=inv.due||addDaysIso(document.getElementById("invDate").value,10);document.getElementById("invNumber").value=inv.number||invoiceNumber();document.getElementById("invoiceLines").innerHTML="";(inv.lines?.length?inv.lines:[{}]).forEach(addInvoiceLine);updateInvoicePreview();window.scrollTo({top:document.getElementById("tab-faktura").offsetTop-80,behavior:"smooth"})}
-function invoiceDownloadHtml(inv){return `<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(inv.number)}</title><style>body{margin:0;padding:24px;background:#f5f7fb;font-family:Inter,Arial,sans-serif;color:#10233d} .wrap{max-width:960px;margin:0 auto} .invoice-document{border:1px solid #d7e0ea;border-radius:22px;background:#fff;padding:28px} h3{margin:0 0 18px;font-size:44px;line-height:1;letter-spacing:-.05em} .invoice-party-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:18px} .invoice-party-card{display:grid;gap:6px;min-height:156px;padding:18px;border:1px solid #d7e0ea;border-radius:18px;background:#f7f9fc} .invoice-card-label{color:#66768a;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em} .invoice-info-bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}.invoice-info-bar>div,.invoice-account-bar{padding:13px 16px;border:1px solid #d7e0ea;border-radius:16px;background:#fff}.invoice-info-bar span,.invoice-account-bar span{display:block;margin-bottom:4px;color:#66768a;font-size:12px;font-weight:800}.invoice-account-bar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}.invoice-table{width:100%;border-collapse:collapse}.invoice-table th,.invoice-table td{padding:12px 10px;border-bottom:1px solid #d7e0ea;text-align:left}.invoice-table th{background:#f8fbff;color:#66768a;font-size:13px}.invoice-table th:nth-child(n+2),.invoice-table td:nth-child(n+2){text-align:right;white-space:nowrap}.invoice-totals{display:grid;gap:10px;margin-top:16px;margin-left:auto;width:min(100%,320px)} .invoice-totals>div{display:flex;justify-content:space-between;gap:16px;padding:12px 14px;border:1px solid #d7e0ea;border-radius:14px;background:#f7f9fc} .invoice-totals>div:last-child{background:#eef7f5;border-color:rgba(15,118,110,.28)} @media print{body{background:#fff;padding:0}.wrap{max-width:none}.invoice-document{border:0;border-radius:0;padding:0}}</style></head><body><div class="wrap">${invoiceHtml(inv)}</div></body></html>`}
-function downloadInvoiceFile(){if(!isPremium()){openModal();return}updateInvoicePreview();document.body.classList.add("print-invoice");window.print()}
-function initInvoice(){loadCompanyDefault();document.getElementById("invDate").value=todayIso();document.getElementById("invDueDate").value=addDaysIso(todayIso(),10);document.getElementById("invNumber").value=invoiceNumber();addInvoiceLine({desc:"Utført arbeid",qty:1,price:0,vat:25});document.getElementById("invDate").addEventListener("input",()=>{document.getElementById("invDueDate").value=addDaysIso(document.getElementById("invDate").value,10);updateInvoicePreview()});[...INV_COMPANY_IDS,"invRecipientName","invRecipientAddress","invRecipientPostal","invRecipientEmail","invDueDate"].forEach(id=>document.getElementById(id).addEventListener("input",updateInvoicePreview));document.getElementById("invCompanyDefault").addEventListener("change",()=>{if(document.getElementById("invCompanyDefault").checked)saveCompanyDefault();updateInvoicePreview()});document.getElementById("addInvoiceLine").addEventListener("click",()=>addInvoiceLine());document.getElementById("printInvoice").addEventListener("click",()=>{if(!isPremium()){openModal();return}updateInvoicePreview();document.body.classList.add("print-invoice");window.print()});window.addEventListener("afterprint",()=>document.body.classList.remove("print-invoice"));window.addEventListener("afterprint",()=>document.body.classList.remove("print-budget"));window.addEventListener("afterprint",()=>document.body.classList.remove("print-biz"));document.getElementById("saveInvoice").addEventListener("click",()=>{if(!isPremium()){openModal();return}const inv=readInvoice();const items=getSavedInvoices();items.unshift(inv);setSavedInvoices(items.slice(0,20));bumpInvoiceNumber();renderSavedInvoices();updateInvoicePreview();alert("Faktura lagret i nettleseren.")});document.getElementById("downloadInvoice").addEventListener("click",downloadInvoiceFile);renderSavedInvoices();updateInvoicePreview()}
+function invoiceDownloadHtml(inv){return `<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(inv.number)}</title><style>@page{size:A4;margin:12mm}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;font-family:Inter,Arial,sans-serif;color:#10233d;font-size:12px;line-height:1.35}.wrap{width:100%;max-width:186mm;margin:0 auto}.invoice-document{width:100%;border:0;border-radius:0;background:#fff;padding:0}h3{margin:0 0 10mm;font-size:30px;line-height:1;letter-spacing:-.04em}.invoice-party-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10mm;margin-bottom:8mm}.invoice-party-card{display:grid;align-content:start;gap:3px;min-height:28mm;padding:6mm;border:1px solid #d7e0ea;border-radius:8px;background:#f7f9fc}.invoice-card-label{color:#66768a;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.invoice-party-card strong{font-size:13px}.invoice-info-bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5mm;margin-bottom:5mm}.invoice-info-bar>div,.invoice-account-bar{padding:4mm;border:1px solid #d7e0ea;border-radius:8px;background:#fff}.invoice-info-bar span,.invoice-account-bar span{display:block;margin-bottom:2px;color:#66768a;font-size:10px;font-weight:800}.invoice-account-bar{display:flex;justify-content:space-between;align-items:center;gap:8mm;margin-bottom:8mm}.invoice-table-wrap{border:1px solid #d7e0ea;border-radius:8px;overflow:hidden;margin:0}.invoice-table{width:100%;min-width:0;border-collapse:collapse;table-layout:fixed;background:#fff}.invoice-table th,.invoice-table td{padding:3.2mm 2.4mm;border-bottom:1px solid #d7e0ea;text-align:left;vertical-align:top;font-size:11px}.invoice-table th{background:#f8fbff;color:#66768a;font-size:10px}.invoice-table th:first-child,.invoice-table td:first-child{width:42%}.invoice-table th:nth-child(2),.invoice-table td:nth-child(2){width:10%}.invoice-table th:nth-child(3),.invoice-table td:nth-child(3),.invoice-table th:nth-child(4),.invoice-table td:nth-child(4),.invoice-table th:nth-child(5),.invoice-table td:nth-child(5){width:16%}.invoice-table th:nth-child(n+2),.invoice-table td:nth-child(n+2){text-align:right;white-space:nowrap}.invoice-totals{display:grid;gap:3mm;margin-top:6mm;margin-left:auto;width:75mm}.invoice-totals>div{display:flex;justify-content:space-between;gap:8mm;padding:3.2mm 4mm;border:1px solid #d7e0ea;border-radius:8px;background:#f7f9fc}.invoice-totals>div:last-child{background:#eef7f5;border-color:rgba(15,118,110,.28);font-size:13px}@media print{.wrap{max-width:none}.invoice-document{break-inside:avoid;page-break-inside:avoid}}</style></head><body><div class="wrap">${invoiceHtml(inv)}</div></body></html>`}
+function printInvoicePdf(){if(!isPremium()){openModal();return}const inv=readInvoice();const html=invoiceDownloadHtml(inv);const frame=document.createElement("iframe");frame.setAttribute("aria-hidden","true");frame.style.position="fixed";frame.style.right="0";frame.style.bottom="0";frame.style.width="0";frame.style.height="0";frame.style.border="0";document.body.appendChild(frame);const doc=frame.contentWindow.document;doc.open();doc.write(html);doc.close();setTimeout(()=>{try{frame.contentWindow.focus();frame.contentWindow.print()}finally{setTimeout(()=>frame.remove(),1500)}},250)}
+function downloadInvoiceFile(){printInvoicePdf()}
+function initInvoice(){loadCompanyDefault();document.getElementById("invDate").value=todayIso();document.getElementById("invDueDate").value=addDaysIso(todayIso(),10);document.getElementById("invNumber").value=invoiceNumber();addInvoiceLine({desc:"Utført arbeid",qty:1,price:0,vat:25});document.getElementById("invDate").addEventListener("input",()=>{document.getElementById("invDueDate").value=addDaysIso(document.getElementById("invDate").value,10);updateInvoicePreview()});[...INV_COMPANY_IDS,"invRecipientName","invRecipientAddress","invRecipientPostal","invRecipientEmail","invDueDate"].forEach(id=>document.getElementById(id).addEventListener("input",updateInvoicePreview));document.getElementById("invCompanyDefault").addEventListener("change",()=>{if(document.getElementById("invCompanyDefault").checked)saveCompanyDefault();updateInvoicePreview()});document.getElementById("addInvoiceLine").addEventListener("click",()=>addInvoiceLine());document.getElementById("printInvoice").addEventListener("click",printInvoicePdf);window.addEventListener("afterprint",()=>document.body.classList.remove("print-invoice"));window.addEventListener("afterprint",()=>document.body.classList.remove("print-budget"));window.addEventListener("afterprint",()=>document.body.classList.remove("print-biz"));document.getElementById("saveInvoice").addEventListener("click",()=>{if(!isPremium()){openModal();return}const inv=readInvoice();const items=getSavedInvoices();items.unshift(inv);setSavedInvoices(items.slice(0,20));bumpInvoiceNumber();renderSavedInvoices();updateInvoicePreview();alert("Faktura lagret i nettleseren.")});document.getElementById("downloadInvoice").addEventListener("click",downloadInvoiceFile);renderSavedInvoices();updateInvoicePreview()}
 
 function calcPower(){const y=val("powerYearKwh"),p=val("powerPrice"),g=val("powerGridMonthly"),m=y*p/12+g;document.getElementById("powerResult").innerHTML=`<div class="kpi-grid"><div class="kpi"><span>Strøm per måned</span><strong>${kr(y*p/12)}</strong></div><div class="kpi"><span>Nettleie per måned</span><strong>${kr(g)}</strong></div><div class="kpi full"><span>Total per måned</span><strong>${kr(m)}</strong></div><div class="kpi"><span>Total per år</span><strong>${kr(m*12)}</strong></div></div>`}["powerYearKwh","powerPrice","powerGridMonthly"].forEach(id=>document.getElementById(id).addEventListener("input",calcPower));
 function calcLoan(){const a=val("loanAmount"),y=val("loanYears"),r=val("loanRate")/100/12,n=y*12,m=r===0?a/n:a*r/(1-Math.pow(1+r,-n)),tot=m*n;document.getElementById("loanResult").innerHTML=`<div class="kpi-grid"><div class="kpi full"><span>Månedlig kostnad</span><strong>${kr(m)}</strong></div><div class="kpi"><span>Total tilbakebetaling</span><strong>${kr(tot)}</strong></div><div class="kpi"><span>Total rentekostnad</span><strong>${kr(tot-a)}</strong></div></div>`}["loanAmount","loanYears","loanRate"].forEach(id=>document.getElementById(id).addEventListener("input",calcLoan));

@@ -1404,3 +1404,54 @@ body:not(.premium-unlocked) #tab-selvstendig::after {
 @media (max-width: 760px) {
   .guide-link-grid { grid-template-columns: 1fr; }
 }
+
+
+/* v34: lisenskode etter kjøp */
+.license-login {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.license-login h3 {
+  margin: 0 0 6px;
+}
+
+.license-login label {
+  margin-top: 12px;
+}
+
+.license-login .btn {
+  margin-top: 12px;
+}
+
+.license-notice {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(18,32,51,.52);
+}
+
+.license-notice-card {
+  position: relative;
+  width: min(680px, 100%);
+  border-radius: 28px;
+  background: #fff;
+  padding: clamp(22px, 4vw, 34px);
+  box-shadow: 0 30px 90px rgba(0,0,0,.25);
+}
+
+.license-notice-card textarea {
+  width: 100%;
+  min-height: 110px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px;
+  font: 700 .95rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: #f8fbff;
+  color: var(--text);
+}
