@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Faktura utskrift</title>
+  <style>
+    @page { size: A4; margin: 12mm; }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #eef2f7;
+      color: #10233d;
+      font-family: Inter, Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .print-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 12px;
+      background: #f5f7fb;
+      border-bottom: 1px solid #d7e0ea;
+    }
+    .print-toolbar button {
+      border: 0;
+      border-radius: 999px;
+      background: #0f766e;
+      color: #fff;
+      font-weight: 900;
+      padding: 12px 18px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .print-toolbar .secondary {
+      background: #e7f7f3;
+      color: #075f56;
+    }
+    .print-help {
+      color: #66768a;
+      font-size: 13px;
+      text-align: center;
+    }
+    .page-wrap {
+      width: min(210mm, calc(100% - 20px));
+      min-height: 297mm;
+      margin: 14px auto;
+      background: #fff;
+      box-shadow: 0 18px 60px rgba(15,35,65,.18);
+      padding: 14mm 12mm;
+    }
+    .invoice-document { width: 100%; border: 0; border-radius: 0; background: #fff; padding: 0; }
+    .invoice-document h3 { margin: 0 0 10mm; font-size: 30px; line-height: 1; letter-spacing: -.04em; }
+    .invoice-party-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10mm; margin-bottom: 8mm; }
+    .invoice-party-card { display: grid; align-content: start; gap: 3px; min-height: 28mm; padding: 6mm; border: 1px solid #d7e0ea; border-radius: 8px; background: #f7f9fc; }
+    .invoice-card-label { color: #66768a; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .invoice-party-card strong { font-size: 13px; }
+    .invoice-info-bar { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 5mm; margin-bottom: 5mm; }
+    .invoice-info-bar > div, .invoice-account-bar { padding: 4mm; border: 1px solid #d7e0ea; border-radius: 8px; background: #fff; }
+    .invoice-info-bar span, .invoice-account-bar span { display: block; margin-bottom: 2px; color: #66768a; font-size: 10px; font-weight: 800; }
+    .invoice-account-bar { display: flex; justify-content: space-between; align-items: center; gap: 8mm; margin-bottom: 8mm; }
+    .invoice-account-bar strong { white-space: nowrap; }
+    .invoice-table-wrap { border: 1px solid #d7e0ea; border-radius: 8px; overflow: hidden; margin: 0; }
+    .invoice-table { width: 100%; min-width: 0; border-collapse: collapse; table-layout: fixed; background: #fff; }
+    .invoice-table th, .invoice-table td { padding: 3.2mm 2.4mm; border-bottom: 1px solid #d7e0ea; text-align: left; vertical-align: top; font-size: 11px; }
+    .invoice-table th { background: #f8fbff; color: #66768a; font-size: 10px; white-space: nowrap; }
+    .invoice-table th:first-child, .invoice-table td:first-child { width: 38%; }
+    .invoice-table th:nth-child(2), .invoice-table td:nth-child(2) { width: 10%; }
+    .invoice-table th:nth-child(3), .invoice-table td:nth-child(3) { width: 18%; }
+    .invoice-table th:nth-child(4), .invoice-table td:nth-child(4) { width: 10%; }
+    .invoice-table th:nth-child(5), .invoice-table td:nth-child(5) { width: 24%; }
+    .invoice-table th:nth-child(n+2), .invoice-table td:nth-child(n+2) { text-align: right; white-space: nowrap; }
+    .invoice-totals { display: grid; gap: 3mm; margin-top: 6mm; margin-left: auto; width: 75mm; }
+    .invoice-totals > div { display: flex; justify-content: space-between; gap: 8mm; padding: 3.2mm 4mm; border: 1px solid #d7e0ea; border-radius: 8px; background: #f7f9fc; }
+    .invoice-totals > div:last-child { background: #eef7f5; border-color: rgba(15,118,110,.28); font-size: 13px; }
+    .missing { max-width: 720px; margin: 30px auto; padding: 22px; background: #fff; border: 1px solid #d7e0ea; border-radius: 18px; }
+    @media (max-width: 760px) {
+      .page-wrap { width: calc(100% - 12px); min-height: auto; margin: 6px auto; padding: 8mm 4mm; box-shadow: none; }
+      .invoice-party-grid, .invoice-info-bar { grid-template-columns: 1fr; }
+      .invoice-account-bar { display: grid; }
+      .invoice-table th, .invoice-table td { font-size: 10px; padding: 2.6mm 1.4mm; }
+      .invoice-document h3 { font-size: 28px; }
+    }
+    @media print {
+      html, body { background: #fff; }
+      .print-toolbar { display: none !important; }
+      .page-wrap { width: auto; min-height: auto; margin: 0; padding: 0; box-shadow: none; }
+      .invoice-document { break-inside: avoid; page-break-inside: avoid; }
+      .missing { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-toolbar">
+    <button type="button" onclick="window.print()">Skriv ut / lagre som PDF</button>
+    <button class="secondary" type="button" onclick="window.close()">Lukk</button>
+    <span class="print-help">Denne siden inneholder kun fakturaen. Velg «Lagre som PDF» i utskriftsvinduet.</span>
+  </div>
+  <main id="content"></main>
+  <script>
+    function safeId(value){ return String(value || '').replace(/[^a-zA-Z0-9._-]/g, ''); }
+    const params = new URLSearchParams(location.search);
+    const id = safeId(params.get('id'));
+    const key = id ? `okonomikalk_invoice_print_${id}` : '';
+    const content = document.getElementById('content');
+    let payload = null;
+    try { payload = key ? JSON.parse(localStorage.getItem(key) || 'null') : null; } catch { payload = null; }
+    if (payload && payload.html) {
+      content.innerHTML = `<div class="page-wrap">${payload.html}</div>`;
+      document.title = payload.number ? `Faktura ${payload.number}` : 'Faktura utskrift';
+      setTimeout(() => { try { window.focus(); } catch {} }, 100);
+    } else {
+      content.innerHTML = '<div class="missing"><h1>Fant ikke fakturaen</h1><p>Gå tilbake til ØkonomiKalk, åpne fakturaen og trykk «Utskrift / PDF» på nytt.</p></div>';
+    }
+  </script>
+</body>
+</html>

@@ -290,9 +290,9 @@ app.post("/api/verify-license", async (req, res) => {
 });
 
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, app: "okonomikalk", version: "v41" });
+  res.json({ ok: true, app: "okonomikalk", version: "v45" });
 });
 
 app.listen(PORT, () => {
-  console.log(`ØkonomiKalk v36 running on ${PUBLIC_URL}`);
+  console.log(`ØkonomiKalk v45 running on ${PUBLIC_URL}`);
 });
