@@ -1455,3 +1455,14 @@ body:not(.premium-unlocked) #tab-selvstendig::after {
   background: #f8fbff;
   color: var(--text);
 }
+
+
+/* v35: shorter license code display */
+.license-code-output {
+  width: 100%;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-align: center;
+}

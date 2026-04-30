@@ -54,27 +54,32 @@ function makePremiumToken(value) {
   return signValue(value);
 }
 
-function base64UrlEncode(value) {
-  return Buffer.from(String(value), "utf8").toString("base64url");
-}
-
 function base64UrlDecode(value) {
   return Buffer.from(String(value), "base64url").toString("utf8");
 }
 
-function makeLicenseCode(sessionId) {
-  const payload = JSON.stringify({
-    v: 1,
-    product: "okonomikalk_naering_199",
-    sessionId: String(sessionId),
-    issuedAt: new Date().toISOString()
-  });
-  const encodedPayload = base64UrlEncode(payload);
-  const signature = signValue(encodedPayload).slice(0, 32);
-  return `OK1.${encodedPayload}.${signature}`;
+const LICENSE_PRODUCT = "okonomikalk_naering_199";
+const LICENSE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+function normalizeLicenseCode(code) {
+  const raw = String(code || "").trim().toUpperCase();
+  if (raw.startsWith("OK1.")) return raw;
+  let normalized = raw.replace(/[^A-Z0-9]/g, "");
+  if (normalized.startsWith("OK")) normalized = normalized.slice(2);
+  if (normalized.length !== 8) return "";
+  return `OK-${normalized.slice(0, 4)}-${normalized.slice(4)}`;
 }
 
-function verifyLicenseCode(code) {
+function makeShortLicenseCode() {
+  let value = "";
+  const bytes = crypto.randomBytes(8);
+  for (let i = 0; i < 8; i += 1) {
+    value += LICENSE_ALPHABET[bytes[i] % LICENSE_ALPHABET.length];
+  }
+  return `OK-${value.slice(0, 4)}-${value.slice(4)}`;
+}
+
+function verifyLegacyLicenseCode(code) {
   const normalized = String(code || "").trim();
   const parts = normalized.split(".");
   if (parts.length !== 3 || parts[0] !== "OK1") return null;
@@ -85,12 +90,79 @@ function verifyLicenseCode(code) {
 
   try {
     const payload = JSON.parse(base64UrlDecode(encodedPayload));
-    if (payload.product !== "okonomikalk_naering_199") return null;
+    if (payload.product !== LICENSE_PRODUCT) return null;
     if (!payload.sessionId) return null;
-    return payload;
+    return { licenseId: payload.sessionId, issuedAt: payload.issuedAt || "legacy" };
   } catch {
     return null;
   }
+}
+
+async function findPaymentIntentByLicenseCode(licenseCode) {
+  if (!stripe) return null;
+  const normalized = normalizeLicenseCode(licenseCode);
+  if (!normalized || normalized.startsWith("OK1.")) return null;
+
+  const result = await stripe.paymentIntents.search({
+    query: `metadata['license_code']:'${normalized}' AND metadata['product']:'${LICENSE_PRODUCT}'`,
+    limit: 1
+  });
+
+  return result.data?.[0] || null;
+}
+
+async function createOrGetLicenseForSession(session) {
+  if (!stripe || !session?.payment_intent) {
+    return null;
+  }
+
+  const paymentIntentId = typeof session.payment_intent === "string"
+    ? session.payment_intent
+    : session.payment_intent.id;
+
+  const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  const existing = normalizeLicenseCode(paymentIntent.metadata?.license_code);
+  if (existing) return existing;
+
+  for (let i = 0; i < 8; i += 1) {
+    const licenseCode = makeShortLicenseCode();
+    const duplicate = await findPaymentIntentByLicenseCode(licenseCode);
+    if (duplicate) continue;
+
+    await stripe.paymentIntents.update(paymentIntentId, {
+      metadata: {
+        ...paymentIntent.metadata,
+        product: LICENSE_PRODUCT,
+        license_code: licenseCode,
+        checkout_session_id: session.id,
+        issued_at: new Date().toISOString()
+      }
+    });
+
+    return licenseCode;
+  }
+
+  throw new Error("Could not generate unique license code.");
+}
+
+async function verifyLicenseCode(code) {
+  const raw = String(code || "").trim();
+  if (raw.startsWith("OK1.")) return verifyLegacyLicenseCode(raw);
+
+  const normalized = normalizeLicenseCode(raw);
+  if (!normalized) return null;
+
+  const paymentIntent = await findPaymentIntentByLicenseCode(normalized);
+  if (!paymentIntent) return null;
+
+  if (paymentIntent.status !== "succeeded") return null;
+  if (paymentIntent.metadata?.product !== LICENSE_PRODUCT) return null;
+
+  return {
+    licenseId: normalized,
+    issuedAt: paymentIntent.metadata?.issued_at || "stripe",
+    paymentIntentId: paymentIntent.id
+  };
 }
 
 // Stripe webhook must use raw body.
@@ -156,7 +228,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
       success_url: `${PUBLIC_URL}/?session_id={CHECKOUT_SESSION_ID}#kalkulatorer`,
       cancel_url: `${PUBLIC_URL}/#kalkulatorer`,
       metadata: {
-        product: "okonomikalk_naering_199"
+        product: LICENSE_PRODUCT
       }
     });
 
@@ -180,8 +252,8 @@ app.get("/api/verify-session", async (req, res) => {
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-    if (session.payment_status === "paid" && session.metadata?.product === "okonomikalk_naering_199") {
-      const licenseCode = makeLicenseCode(session.id);
+    if (session.payment_status === "paid" && session.metadata?.product === LICENSE_PRODUCT) {
+      const licenseCode = await createOrGetLicenseForSession(session);
       return res.json({
         premium: true,
         token: makePremiumToken(session.id),
@@ -197,25 +269,30 @@ app.get("/api/verify-session", async (req, res) => {
 });
 
 
-app.post("/api/verify-license", (req, res) => {
-  const licenseCode = req.body?.licenseCode;
-  const license = verifyLicenseCode(licenseCode);
+app.post("/api/verify-license", async (req, res) => {
+  try {
+    const licenseCode = req.body?.licenseCode;
+    const license = await verifyLicenseCode(licenseCode);
 
-  if (!license) {
-    return res.status(401).json({ ok: false, error: "Ugyldig lisenskode." });
+    if (!license) {
+      return res.status(401).json({ ok: false, error: "Ugyldig lisenskode." });
+    }
+
+    return res.json({
+      ok: true,
+      premium: true,
+      token: makePremiumToken(`${license.licenseId}:${license.issuedAt}`)
+    });
+  } catch (error) {
+    console.error("Verify license error:", error);
+    res.status(500).json({ ok: false, error: "Kunne ikke verifisere lisenskode." });
   }
-
-  return res.json({
-    ok: true,
-    premium: true,
-    token: makePremiumToken(`${license.sessionId}:${license.issuedAt}`)
-  });
 });
 
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, app: "okonomikalk", version: "v34" });
+  res.json({ ok: true, app: "okonomikalk", version: "v36" });
 });
 
 app.listen(PORT, () => {
-  console.log(`ØkonomiKalk v34 running on ${PUBLIC_URL}`);
+  console.log(`ØkonomiKalk v36 running on ${PUBLIC_URL}`);
 });
