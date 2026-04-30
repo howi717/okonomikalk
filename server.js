@@ -12,6 +12,34 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+const SITE_LOCK_ENABLED = process.env.SITE_LOCK_ENABLED === "true";
+const SITE_LOCK_USER = process.env.SITE_LOCK_USER || "";
+const SITE_LOCK_PASSWORD = process.env.SITE_LOCK_PASSWORD || "";
+
+function siteLock(req, res, next) {
+  if (!SITE_LOCK_ENABLED) return next();
+
+  // La Stripe webhook slippe gjennom hvis du senere bruker webhook.
+  if (req.path === "/api/stripe-webhook") return next();
+
+  const auth = req.headers.authorization || "";
+  const [scheme, encoded] = auth.split(" ");
+
+  if (scheme === "Basic" && encoded) {
+    const [user, pass] = Buffer.from(encoded, "base64").toString().split(":");
+
+    if (user === SITE_LOCK_USER && pass === SITE_LOCK_PASSWORD) {
+      return next();
+    }
+  }
+
+  res.setHeader("WWW-Authenticate", 'Basic realm="OkonomiKalk test"');
+  res.setHeader("X-Robots-Tag", "noindex, nofollow");
+  return res.status(401).send("ØkonomiKalk er under testing.");
+}
+
+app.use(siteLock);
+
 const PORT = process.env.PORT || 3000;
 const PUBLIC_URL = process.env.PUBLIC_URL || `http://localhost:${PORT}`;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || "";
