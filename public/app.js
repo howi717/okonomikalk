@@ -142,6 +142,190 @@ function getScenarios(){try{return JSON.parse(localStorage.getItem("smartkalk_bi
 function saveBizScenarioToBrowser(){if(!isPremium()){openModal();return}const it=getScenarios();it.unshift(latestBiz);setScenarios(it.slice(0,8));renderSaved()}function printBizPdf(){if(!isPremium()){openModal();return}document.body.classList.add("print-biz");window.print()}document.getElementById("saveBizScenario").addEventListener("click",saveBizScenarioToBrowser);const saveBizScenarioAlt=document.getElementById("saveBizScenarioAlt");if(saveBizScenarioAlt)saveBizScenarioAlt.addEventListener("click",saveBizScenarioToBrowser);const printBizMain=document.getElementById("printBizMain");if(printBizMain)printBizMain.addEventListener("click",printBizPdf);document.getElementById("printBizReport").addEventListener("click",printBizPdf);const downloadBizMain=document.getElementById("downloadBizMain");if(downloadBizMain)downloadBizMain.addEventListener("click",printBizPdf);const downloadBizPdf=document.getElementById("downloadBizPdf");if(downloadBizPdf)downloadBizPdf.addEventListener("click",printBizPdf);
 
 const HIDS=["hourDesiredIncome","hourVacationDays","hourWeeklyHours","hourFuel","hourTravel","hourMeetings","hourPurchases","hourAssets","hourFinance","hourPension","hourSickPay","hourInsurance","hourOther"];function calcHourly(){const desired=val("hourDesiredIncome"),vac=val("hourVacationDays"),hours=val("hourWeeklyHours"),cost=sum(val("hourFuel"),val("hourTravel"),val("hourMeetings"),val("hourPurchases"),val("hourAssets"),val("hourFinance"),val("hourPension"),val("hourSickPay"),val("hourInsurance"),val("hourOther")),turnover=desired+cost,weeks=Math.max(0,52-vac/5),billable=weeks*hours,rate=billable>0?turnover/billable:0,costPct=desired>0?cost/desired:0;document.getElementById("hourlyResult").innerHTML=`<div class="kpi-grid"><div class="kpi"><span>Ønsket inntekt</span><strong>${kr(desired)}</strong></div><div class="kpi"><span>Sum driftskostnader</span><strong>${kr(cost)}</strong></div><div class="kpi"><span>Driftskostnader i prosent</span><strong>${pct(costPct)}</strong></div><div class="kpi full"><span>Omsetning for å nå ønsket inntekt</span><strong>${kr(turnover)}</strong></div><div class="kpi"><span>Fakturerbare timer per år</span><strong>${nf.format(billable)}</strong></div><div class="kpi full"><span>Anbefalt timespris eks. mva</span><strong>${kr(rate)}</strong></div></div>`}HIDS.forEach(id=>document.getElementById(id).addEventListener("input",calcHourly));
+
+// Business budgets v37
+const BUDGET_MONTHS=["Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Des"];
+const OPERATING_ROWS=[
+  {id:"income",label:"Inntekter",kind:"input"},
+  {id:"sumIncome",label:"Sum driftsinntekter",kind:"calc",calc:(m,d)=>d.income[m]},
+  {id:"costs",label:"Kostnader",kind:"section"},
+  {id:"variableCosts",label:"Variable kostnader",kind:"input"},
+  {id:"productionCosts",label:"Produksjonskostnader",kind:"input"},
+  {id:"otherVariableCosts",label:"Andre kostnader",kind:"input"},
+  {id:"sumVariableCosts",label:"Sum variable kostnader",kind:"calc",calc:(m,d)=>d.variableCosts[m]+d.productionCosts[m]+d.otherVariableCosts[m]},
+  {id:"contributionMargin",label:"Dekningsbidrag",kind:"calc",calc:(m,d)=>d.income[m]-(d.variableCosts[m]+d.productionCosts[m]+d.otherVariableCosts[m])},
+  {id:"fixedCosts",label:"Faste kostnader",kind:"section"},
+  {id:"insurance",label:"Forsikringer",kind:"input"},
+  {id:"municipalFees",label:"Kommunale avgifter",kind:"input"},
+  {id:"equipmentMaterials",label:"Utstyr / materiell",kind:"input"},
+  {id:"salaryCosts",label:"Lønn (feriepenger + arbeidsgiveravgift)",kind:"input"},
+  {id:"rentCosts",label:"Leieutgifter",kind:"input"},
+  {id:"powerCosts",label:"Strøm",kind:"input"},
+  {id:"auditCosts",label:"Revisjon",kind:"input"},
+  {id:"mobileCosts",label:"Mobilutgifter",kind:"input"},
+  {id:"cleaningCosts",label:"Renhold",kind:"input"},
+  {id:"marketingCosts",label:"Markedsføring",kind:"input"},
+  {id:"otherFixedCosts",label:"Andre utgifter",kind:"input"},
+  {id:"depreciation",label:"Avskrivninger",kind:"input"},
+  {id:"courses",label:"Kurs",kind:"input"},
+  {id:"accounting",label:"Regnskap",kind:"input"},
+  {id:"travelCosts",label:"Reisekostnader",kind:"input"},
+  {id:"sumFixedCosts",label:"Sum faste kostnader",kind:"calc",calc:(m,d)=>["insurance","municipalFees","equipmentMaterials","salaryCosts","rentCosts","powerCosts","auditCosts","mobileCosts","cleaningCosts","marketingCosts","otherFixedCosts","depreciation","courses","accounting","travelCosts"].reduce((a,id)=>a+d[id][m],0)},
+  {id:"operatingResult",label:"Driftsresultat",kind:"calc",calc:(m,d)=>d.income[m]-(d.variableCosts[m]+d.productionCosts[m]+d.otherVariableCosts[m])-["insurance","municipalFees","equipmentMaterials","salaryCosts","rentCosts","powerCosts","auditCosts","mobileCosts","cleaningCosts","marketingCosts","otherFixedCosts","depreciation","courses","accounting","travelCosts"].reduce((a,id)=>a+d[id][m],0)},
+  {id:"interestIncome",label:"Renteinntekter",kind:"input"},
+  {id:"interestCosts",label:"Rentekostnader",kind:"input"},
+  {id:"netFinancialCosts",label:"Netto finanskostnader",kind:"calc",calc:(m,d)=>d.interestCosts[m]-d.interestIncome[m]},
+  {id:"result",label:"RESULTAT",kind:"calc",calc:(m,d)=>d.income[m]-(d.variableCosts[m]+d.productionCosts[m]+d.otherVariableCosts[m])-["insurance","municipalFees","equipmentMaterials","salaryCosts","rentCosts","powerCosts","auditCosts","mobileCosts","cleaningCosts","marketingCosts","otherFixedCosts","depreciation","courses","accounting","travelCosts"].reduce((a,id)=>a+d[id][m],0)+d.interestIncome[m]-d.interestCosts[m]}
+];
+const LIQUIDITY_ROWS=[
+  {id:"startCash",label:"Likvide midler ved starten av måneden",kind:"calcStart"},
+  {id:"paymentsIn",label:"Innbetalinger",kind:"section"},
+  {id:"salesPayments",label:"Salg av varer og tjenester",kind:"input"},
+  {id:"otherPayments",label:"Andre innbetalinger (f.eks. renter, utbytte)",kind:"input"},
+  {id:"loanPayments",label:"Innbetalinger fra nye lån",kind:"input"},
+  {id:"sumPaymentsIn",label:"Sum innbetalinger",kind:"calc",calc:(m,d)=>d.salesPayments[m]+d.otherPayments[m]+d.loanPayments[m]},
+  {id:"paymentsOut",label:"Utbetalinger",kind:"section"},
+  {id:"supplierCosts",label:"Leverandørkostnader",kind:"input"},
+  {id:"salary",label:"Lønn",kind:"input"},
+  {id:"holidayPay",label:"Feriepenger",kind:"input"},
+  {id:"taxDeduction",label:"Skattetrekk",kind:"input"},
+  {id:"employerTax",label:"Arbeidsgiveravgift",kind:"input"},
+  {id:"rent",label:"Husleie",kind:"input"},
+  {id:"power",label:"Strøm",kind:"input"},
+  {id:"phone",label:"Telefon",kind:"input"},
+  {id:"insurance",label:"Forsikring",kind:"input"},
+  {id:"accountant",label:"Regnskapsfører",kind:"input"},
+  {id:"marketing",label:"Markedsføring og annonsering",kind:"input"},
+  {id:"otherCosts",label:"Andre utgifter",kind:"input"},
+  {id:"vat",label:"Merverdiavgift",kind:"input"},
+  {id:"tax",label:"Skatt",kind:"input"},
+  {id:"loanRepayment",label:"Nedbetaling lån og renter",kind:"input"},
+  {id:"investments",label:"Investeringer",kind:"input"},
+  {id:"sumPaymentsOut",label:"Sum utbetalinger",kind:"calc",calc:(m,d)=>["supplierCosts","salary","holidayPay","taxDeduction","employerTax","rent","power","phone","insurance","accountant","marketing","otherCosts","vat","tax","loanRepayment","investments"].reduce((a,id)=>a+d[id][m],0)},
+  {id:"cashChange",label:"Endring i likvide midler for denne måneden (innbet. - utbet.)",kind:"calc",calc:(m,d)=>d.salesPayments[m]+d.otherPayments[m]+d.loanPayments[m]-["supplierCosts","salary","holidayPay","taxDeduction","employerTax","rent","power","phone","insurance","accountant","marketing","otherCosts","vat","tax","loanRepayment","investments"].reduce((a,id)=>a+d[id][m],0)},
+  {id:"endCash",label:"Likvide midler ved slutten av måneden",kind:"calcEnd"}
+];
+function budgetRowValue(row,m,data,type){
+  if(row.kind==="section")return null;
+  if(type==="liquidity"&&row.kind==="calcStart"){
+    if(m===0)return data.startCashInput?.[0]||0;
+    return budgetRowValue(LIQUIDITY_ROWS.find(r=>r.id==="endCash"),m-1,data,type);
+  }
+  if(type==="liquidity"&&row.kind==="calcEnd")return budgetRowValue(LIQUIDITY_ROWS.find(r=>r.id==="startCash"),m,data,type)+budgetRowValue(LIQUIDITY_ROWS.find(r=>r.id==="cashChange"),m,data,type);
+  if(row.kind==="calc")return row.calc(m,data);
+  return data[row.id]?.[m]||0;
+}
+function readBudgetMatrix(rows,prefix,type){
+  const data={};
+  rows.filter(r=>r.kind==="input").forEach(row=>{data[row.id]=BUDGET_MONTHS.map((_,m)=>Number(document.querySelector(`[data-${prefix}-input="${row.id}-${m}"]`)?.value||0))});
+  if(type==="liquidity")data.startCashInput=[Number(document.querySelector(`[data-${prefix}-input="startCash-0"]`)?.value||0)];
+  return data;
+}
+function renderBusinessBudgetTable(containerId,summaryId,rows,prefix,type){
+  const container=document.getElementById(containerId);
+  if(!container)return;
+  const existing=readBudgetMatrix(rows,prefix,type);
+  const header=`<thead><tr><th>Post</th>${BUDGET_MONTHS.map(m=>`<th>${m}</th>`).join("")}<th>Sum år</th></tr></thead>`;
+  const body=rows.map(row=>{
+    if(row.kind==="section")return `<tr class="budget-section-row"><th colspan="14">${row.label}</th></tr>`;
+    const cells=BUDGET_MONTHS.map((_,m)=>{
+      const editable=row.kind==="input" || (type==="liquidity"&&row.kind==="calcStart"&&m===0);
+      const value=budgetRowValue(row,m,existing,type);
+      if(editable){
+        const inputId=row.kind==="calcStart"?"startCash":row.id;
+        return `<td><input type="number" step="100" value="${value}" data-${prefix}-input="${inputId}-${m}"></td>`;
+      }
+      return `<td class="budget-calc-cell">${Math.round(value).toLocaleString("no-NO")}</td>`;
+    }).join("");
+    const yearSum=BUDGET_MONTHS.reduce((a,_,m)=>a+budgetRowValue(row,m,existing,type),0);
+    return `<tr class="${row.kind==="calc"||row.kind==="calcEnd"?"budget-total-row":""}"><th>${row.label}</th>${cells}<th>${Math.round(yearSum).toLocaleString("no-NO")}</th></tr>`;
+  }).join("");
+  container.innerHTML=`<table class="business-budget-table">${header}<tbody>${body}</tbody></table>`;
+  container.querySelectorAll(`input[data-${prefix}-input]`).forEach(input=>input.addEventListener("change",()=>updateBusinessBudget(prefix,type)));
+  updateBusinessBudget(prefix,type,false);
+}
+function updateBusinessBudget(prefix,type,rerender=true){
+  const rows=type==="operating"?OPERATING_ROWS:LIQUIDITY_ROWS;
+  const data=readBudgetMatrix(rows,prefix,type);
+  document.querySelectorAll(`input[data-${prefix}-input]`).forEach(input=>{
+    const [rowId,mStr]=input.getAttribute(`data-${prefix}-input`).split("-");
+    const m=Number(mStr);if(rowId==="startCash")return;if(!data[rowId])data[rowId]=Array(12).fill(0);data[rowId][m]=Number(input.value||0);
+  });
+  rows.forEach(row=>{if(row.kind==="section")return;BUDGET_MONTHS.forEach((_,m)=>{const cell=document.querySelector(`#${type==="operating"?"operatingBudgetTable":"liquidityBudgetTable"} tr:nth-child(${rows.indexOf(row)+2}) td:nth-child(${m+2})`);});});
+  if(rerender)renderBusinessBudgetTable(type==="operating"?"operatingBudgetTable":"liquidityBudgetTable",type==="operating"?"operatingBudgetSummary":"liquidityBudgetSummary",rows,prefix,type);
+  const summary=document.getElementById(type==="operating"?"operatingBudgetSummary":"liquidityBudgetSummary");
+  if(!summary)return;
+  if(type==="operating"){
+    const resultRow=rows.find(r=>r.id==="result"),incomeRow=rows.find(r=>r.id==="sumIncome"),fixedRow=rows.find(r=>r.id==="sumFixedCosts");
+    const yearIncome=BUDGET_MONTHS.reduce((a,_,m)=>a+budgetRowValue(incomeRow,m,data,type),0);
+    const yearFixed=BUDGET_MONTHS.reduce((a,_,m)=>a+budgetRowValue(fixedRow,m,data,type),0);
+    const yearResult=BUDGET_MONTHS.reduce((a,_,m)=>a+budgetRowValue(resultRow,m,data,type),0);
+    summary.innerHTML=`<div class="kpi"><span>Sum driftsinntekter</span><strong>${kr(yearIncome)}</strong></div><div class="kpi"><span>Sum faste kostnader</span><strong>${kr(yearFixed)}</strong></div><div class="kpi full"><span>RESULTAT</span><strong>${kr(yearResult)}</strong></div>`;
+  } else {
+    const start=budgetRowValue(rows.find(r=>r.id==="startCash"),0,data,type);
+    const end=budgetRowValue(rows.find(r=>r.id==="endCash"),11,data,type);
+    const change=BUDGET_MONTHS.reduce((a,_,m)=>a+budgetRowValue(rows.find(r=>r.id==="cashChange"),m,data,type),0);
+    summary.innerHTML=`<div class="kpi"><span>Start likvide midler</span><strong>${kr(start)}</strong></div><div class="kpi"><span>Endring i året</span><strong>${kr(change)}</strong></div><div class="kpi full"><span>Likvide midler ved årets slutt</span><strong>${kr(end)}</strong></div>`;
+  }
+}
+function collectBusinessBudgetCsv(rows,prefix,type){
+  const data=readBudgetMatrix(rows,prefix,type);
+  const csvRows=[["Post",...BUDGET_MONTHS,"Sum år"]];
+  rows.forEach(row=>{
+    if(row.kind==="section"){csvRows.push([row.label,...Array(13).fill("")]);return;}
+    const vals=BUDGET_MONTHS.map((_,m)=>Math.round(budgetRowValue(row,m,data,type)));
+    csvRows.push([row.label,...vals,vals.reduce((a,b)=>a+b,0)]);
+  });
+  return csvRows;
+}
+function downloadCsv(filename,rows){
+  const csv="\ufeff"+rows.map(row=>row.map(cell=>`"${String(cell??"").replaceAll('"','""')}"`).join(";")).join("\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+function initBusinessBudgets(){
+  renderBusinessBudgetTable("operatingBudgetTable","operatingBudgetSummary",OPERATING_ROWS,"opbudget","operating");
+  renderBusinessBudgetTable("liquidityBudgetTable","liquidityBudgetSummary",LIQUIDITY_ROWS,"liqbudget","liquidity");
+  const opBtn=document.getElementById("exportOperatingBudgetCsv");if(opBtn)opBtn.addEventListener("click",()=>downloadCsv("okonomikalk-drifts-resultatbudsjett.csv",collectBusinessBudgetCsv(OPERATING_ROWS,"opbudget","operating")));
+  const liqBtn=document.getElementById("exportLiquidityBudgetCsv");if(liqBtn)liqBtn.addEventListener("click",()=>downloadCsv("okonomikalk-likviditetsbudsjett.csv",collectBusinessBudgetCsv(LIQUIDITY_ROWS,"liqbudget","liquidity")));
+}
+
+// Simple mileage log v38
+const MILEAGE_RATE=3.5;
+let mileageRowCounter=0;
+function mileageToday(){return new Date().toISOString().slice(0,10)}
+function addMileageRow(row={}){
+  const tbody=document.getElementById("mileageRows");
+  if(!tbody)return;
+  const tr=document.createElement("tr");
+  tr.dataset.mileageRow=String(mileageRowCounter++);
+  tr.innerHTML=`<td><input type="date" class="mileageDate" value="${esc(row.date||mileageToday())}"></td><td><input type="text" class="mileageFrom" value="${esc(row.from||"")}" placeholder="Fra"></td><td><input type="text" class="mileageTo" value="${esc(row.to||"")}" placeholder="Til"></td><td><input type="text" class="mileagePurpose" value="${esc(row.purpose||"")}" placeholder="Formål"></td><td><input type="number" class="mileageKm" min="0" step="1" value="${row.km??0}"></td><td><button class="btn ghost mileageDelete" type="button">Slett</button></td>`;
+  tbody.appendChild(tr);
+  tr.querySelectorAll("input").forEach(input=>input.addEventListener("input",updateMileageSummary));
+  tr.querySelector(".mileageDelete").addEventListener("click",()=>{tr.remove();if(!document.querySelectorAll("#mileageRows tr").length)addMileageRow();updateMileageSummary()});
+  updateMileageSummary();
+}
+function readMileageRows(){return [...document.querySelectorAll("#mileageRows tr")].map(tr=>({date:tr.querySelector(".mileageDate")?.value||"",from:tr.querySelector(".mileageFrom")?.value.trim()||"",to:tr.querySelector(".mileageTo")?.value.trim()||"",purpose:tr.querySelector(".mileagePurpose")?.value.trim()||"",km:Number(tr.querySelector(".mileageKm")?.value||0)}))}
+function updateMileageSummary(){
+  const rows=readMileageRows();
+  const km=rows.reduce((a,r)=>a+r.km,0);
+  const amount=km*MILEAGE_RATE;
+  const summary=document.getElementById("mileageSummary");
+  if(summary)summary.innerHTML=`<div class="kpi"><span>Sum kilometer</span><strong>${nf.format(km)} km</strong></div><div class="kpi"><span>Sats</span><strong>${kr(MILEAGE_RATE)} per km</strong></div><div class="kpi full"><span>Skattefritt beløp</span><strong>${kr(amount)}</strong></div>`;
+}
+function collectMileageCsv(){
+  const rows=readMileageRows();
+  const km=rows.reduce((a,r)=>a+r.km,0),amount=km*MILEAGE_RATE;
+  return [["Firmanavn",document.getElementById("mileageCompany")?.value||""],["Navn eier bil",document.getElementById("mileageOwner")?.value||""],["Regnr.",document.getElementById("mileageReg")?.value||""],[],["Dato","Kjørt fra","Kjørt til","Formål","Antall km"],...rows.map(r=>[r.date,r.from,r.to,r.purpose,r.km]),[],["Sum kilometer",km],["Sats per km",MILEAGE_RATE],["Skattefritt beløp",Math.round(amount)]];
+}
+function initMileageLog(){
+  if(!document.getElementById("mileageRows"))return;
+  addMileageRow({purpose:"Kundemøte",km:0});
+  ["mileageCompany","mileageOwner","mileageReg"].forEach(id=>document.getElementById(id)?.addEventListener("input",updateMileageSummary));
+  document.getElementById("addMileageRow")?.addEventListener("click",()=>addMileageRow());
+  document.getElementById("exportMileageCsv")?.addEventListener("click",()=>downloadCsv("okonomikalk-kjorebok.csv",collectMileageCsv()));
+  updateMileageSummary();
+}
+
 // Invoice tools v16
 const INV_COMPANY_IDS=["invCompanyName","invCompanyAddress","invCompanyEmail","invCompanyAccount"];
 let invoiceLineCounter=0;
@@ -272,4 +456,4 @@ function salarySearch(){
 
 document.getElementById("salarySearch").addEventListener("input",salarySearch);
 
-function handleInitialNavigation(){const params=new URLSearchParams(window.location.search);const tool=params.get("tool");const tab=params.get("tab");const bizTab=params.get("biz");setToolMode("private");if(location.hash){const h=location.hash.replace("#","");if(document.getElementById(h)?.classList.contains("page"))switchPage(h)}if(tool==="business"){openBusinessTools();if(bizTab)switchTab("biz",bizTab)}else if(tool==="private"){openPrivateTools();if(tab)switchTab("calc",tab)}}handleInitialNavigation();empTax();updateBiz();updatePremium();renderSaved();calcHourly();calcPower();calcLoan();initBudget();calcBudget();initInvoice();salarySearch();
+function handleInitialNavigation(){const params=new URLSearchParams(window.location.search);const tool=params.get("tool");const tab=params.get("tab");const bizTab=params.get("biz");setToolMode("private");if(location.hash){const h=location.hash.replace("#","");if(document.getElementById(h)?.classList.contains("page"))switchPage(h)}if(tool==="business"){openBusinessTools();if(bizTab)switchTab("biz",bizTab)}else if(tool==="private"){openPrivateTools();if(tab)switchTab("calc",tab)}}handleInitialNavigation();empTax();updateBiz();updatePremium();renderSaved();calcHourly();calcPower();calcLoan();initBudget();calcBudget();initBusinessBudgets();initMileageLog();initInvoice();salarySearch();

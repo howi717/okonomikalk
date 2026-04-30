@@ -1466,3 +1466,149 @@ body:not(.premium-unlocked) #tab-selvstendig::after {
   letter-spacing: .04em;
   text-align: center;
 }
+
+
+/* v37: business budget tables */
+.wide-budget-panel {
+  max-width: none;
+}
+
+.business-budget-wrap {
+  overflow-x: auto;
+  margin-top: 18px;
+}
+
+.business-budget-table {
+  min-width: 1320px;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.business-budget-table th:first-child {
+  width: 260px;
+  text-align: left;
+}
+
+.business-budget-table th,
+.business-budget-table td {
+  padding: 9px 8px;
+  font-size: .86rem;
+  vertical-align: middle;
+}
+
+.business-budget-table input {
+  min-height: 36px;
+  padding: 7px 8px;
+  border-radius: 10px;
+  text-align: right;
+  font-size: .84rem;
+}
+
+.business-budget-table td,
+.business-budget-table th:not(:first-child) {
+  text-align: right;
+}
+
+.budget-section-row th {
+  background: #e7f7f3 !important;
+  color: var(--primary-2);
+  text-align: left !important;
+  font-weight: 950;
+}
+
+.budget-total-row th,
+.budget-total-row td,
+.budget-total-row .budget-calc-cell {
+  background: #f8fbff;
+  font-weight: 900;
+}
+
+.budget-calc-cell {
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.budget-kpi-grid {
+  margin: 18px 0 4px;
+}
+
+.budget-export-actions {
+  margin-top: 0;
+}
+
+.budget-tips-panel {
+  box-shadow: none;
+  margin-top: 20px;
+}
+
+.budget-tips-list {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--muted);
+  line-height: 1.75;
+  font-weight: 750;
+}
+
+@media (max-width: 760px) {
+  .business-budget-table {
+    min-width: 1180px;
+  }
+
+  .business-budget-table th,
+  .business-budget-table td {
+    font-size: .78rem;
+    padding: 7px 6px;
+  }
+}
+
+
+/* v38: simple mileage log */
+.mileage-info-fieldset {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.mileage-table {
+  min-width: 980px;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.mileage-table th,
+.mileage-table td {
+  padding: 9px 8px;
+  font-size: .86rem;
+}
+
+.mileage-table input {
+  min-height: 38px;
+  padding: 8px 9px;
+  border-radius: 10px;
+  font-size: .84rem;
+}
+
+.mileage-table th:nth-child(1) { width: 150px; }
+.mileage-table th:nth-child(2),
+.mileage-table th:nth-child(3) { width: 180px; }
+.mileage-table th:nth-child(5) { width: 115px; }
+.mileage-table th:nth-child(6) { width: 105px; }
+
+.mileage-table .mileageKm {
+  text-align: right;
+}
+
+.mileageDelete {
+  min-width: 86px;
+  background: #dff4ee !important;
+  color: #0c5f57 !important;
+  font-weight: 900 !important;
+}
+
+.mileage-rules-panel {
+  margin-top: 22px;
+}
+
+@media (max-width: 860px) {
+  .mileage-info-fieldset {
+    grid-template-columns: 1fr;
+  }
+}

@@ -50,6 +50,9 @@
               <li>Dokumentasjon jeg trenger</li>
               <li>Skrive faktura</li>
               <li>Hva bør jeg ta i timespris?</li>
+              <li>Drifts-/resultatbudsjett for 1 år</li>
+              <li>Likviditetsbudsjett for 1 år</li>
+              <li>Enkel kjørebok</li>
               <li>Utskrifter / PDF</li>
             </ul>
           </div>
@@ -157,6 +160,9 @@ For barn 12 år og eldre med særskilt behov for omsorg og pleie videreføres gr
         <nav class="subtabs nested">
           <button class="subtab active" data-tab-group="biz" data-tab="bizskatt" type="button">Skatt</button>
           <button class="subtab" data-tab-group="biz" data-tab="timespris" type="button">Min timespris?</button>
+          <button class="subtab" data-tab-group="biz" data-tab="driftsbudsjett" type="button">Driftsbudsjett</button>
+          <button class="subtab" data-tab-group="biz" data-tab="likviditetsbudsjett" type="button">Likviditetsbudsjett</button>
+          <button class="subtab" data-tab-group="biz" data-tab="kjorebok" type="button">Kjørebok</button>
           <button class="subtab" data-tab-group="biz" data-tab="faktura" type="button">Faktura</button>
         </nav>
 
@@ -243,6 +249,92 @@ For barn 12 år og eldre med særskilt behov for omsorg og pleie videreføres gr
             </div>
           </section>
 
+
+          <section id="tab-driftsbudsjett" class="tab-panel" data-tab-panel="biz">
+            <div class="panel input-panel wide-budget-panel">
+              <div class="section-title">
+                <p class="eyebrow">Næring</p>
+                <h2>Drifts-/resultatbudsjett for 1 år</h2>
+                <p>Legg inn forventede inntekter og kostnader måned for måned. Summeringer og resultat beregnes automatisk. Last ned som CSV for å åpne i standard regneark på PC, Mac, mobil eller nettbrett.</p>
+              </div>
+              <div class="form-actions budget-export-actions">
+                <button class="btn secondary" id="exportOperatingBudgetCsv" type="button">Åpne/lagre som regneark (CSV)</button>
+              </div>
+              <div id="operatingBudgetSummary" class="kpi-grid budget-kpi-grid"></div>
+              <div id="operatingBudgetTable" class="table-wrap business-budget-wrap"></div>
+            </div>
+          </section>
+
+          <section id="tab-likviditetsbudsjett" class="tab-panel" data-tab-panel="biz">
+            <div class="panel input-panel wide-budget-panel">
+              <div class="section-title">
+                <p class="eyebrow">Næring</p>
+                <h2>Likviditetsbudsjett for 1 år</h2>
+                <p>Planlegg innbetalinger, utbetalinger og likvide midler måned for måned. Last ned som CSV for å åpne i standard regneark på enheten.</p>
+              </div>
+              <div class="form-actions budget-export-actions">
+                <button class="btn secondary" id="exportLiquidityBudgetCsv" type="button">Åpne/lagre som regneark (CSV)</button>
+              </div>
+              <div id="liquidityBudgetSummary" class="kpi-grid budget-kpi-grid"></div>
+              <div id="liquidityBudgetTable" class="table-wrap business-budget-wrap"></div>
+              <article class="panel budget-tips-panel">
+                <p class="eyebrow">Tips</p>
+                <h2>5 tips når du setter opp budsjettet</h2>
+                <ol class="budget-tips-list">
+                  <li>Budsjetter med realistiske inntekter og kostnader.</li>
+                  <li>Vent med å føre inntekt til kunden har betalt.</li>
+                  <li>Husk å ta med mva på både inntekter og utgifter.</li>
+                  <li>Før kostnadene i perioden du betaler dem.</li>
+                  <li>Sammenlign med faktiske tall og oppdater budsjettet ofte.</li>
+                </ol>
+              </article>
+            </div>
+          </section>
+
+
+          <section id="tab-kjorebok" class="tab-panel" data-tab-panel="biz">
+            <div class="panel input-panel wide-budget-panel mileage-panel">
+              <div class="section-title">
+                <p class="eyebrow">Næring</p>
+                <h2>Enkel kjørebok</h2>
+                <p>Før kjøring i forbindelse med arbeid og oppdrag. Kilometer summeres automatisk og beregnes med 3,50 kr per km.</p>
+              </div>
+              <form class="form mileage-form" id="mileageForm">
+                <fieldset class="invoice-fieldset mileage-info-fieldset">
+                  <div class="invoice-fieldset-title">Firma og bil</div>
+                  <label>Firmanavn<input type="text" id="mileageCompany" autocomplete="organization"></label>
+                  <label>Navn eier bil<input type="text" id="mileageOwner" autocomplete="name"></label>
+                  <label>Regnr.<input type="text" id="mileageReg" placeholder="AB 12345"></label>
+                </fieldset>
+              </form>
+              <div class="form-actions budget-export-actions">
+                <button class="btn ghost" id="addMileageRow" type="button">Legg til tur</button>
+                <button class="btn secondary" id="exportMileageCsv" type="button">Åpne/lagre som regneark (CSV)</button>
+              </div>
+              <div id="mileageSummary" class="kpi-grid budget-kpi-grid"></div>
+              <div class="table-wrap business-budget-wrap mileage-table-wrap">
+                <table class="mileage-table">
+                  <thead>
+                    <tr><th>Dato</th><th>Kjørt fra</th><th>Kjørt til</th><th>Formål</th><th>Antall km</th><th></th></tr>
+                  </thead>
+                  <tbody id="mileageRows"></tbody>
+                </table>
+              </div>
+              <article class="panel budget-tips-panel mileage-rules-panel">
+                <p class="eyebrow">Regler</p>
+                <h2>Regler for kjøregodtgjørelse</h2>
+                <p>For enkeltpersonforetak kan du normalt føre kjøregodtgjørelse når du bruker privat bil i forbindelse med arbeid og oppdrag. ØkonomiKalk bruker satsen 3,50 kr per km i denne enkle kjøreboken.</p>
+                <ul class="budget-tips-list">
+                  <li>Før dato, hvor du kjørte fra og til, formålet med turen og antall kilometer.</li>
+                  <li>Kjøringen må være knyttet til arbeid, oppdrag eller næringsvirksomheten.</li>
+                  <li>Ta vare på kjøreboken som dokumentasjon sammen med regnskapet.</li>
+                  <li>Dersom du kjører mye eller bruker firmabil, bør du kontrollere reglene med Skatteetaten eller regnskapsfører.</li>
+                  <li>Beløpet her er et estimat og erstatter ikke regnskapsmessig eller skattemessig rådgivning.</li>
+                </ul>
+              </article>
+            </div>
+          </section>
+
           <section id="tab-faktura" class="tab-panel" data-tab-panel="biz">
             <div class="calculator-layout invoice-layout">
               <div class="panel input-panel">
@@ -321,7 +413,7 @@ For barn 12 år og eldre med særskilt behov for omsorg og pleie videreføres gr
   <section class="section legal"><h2>Ansvarsfraskrivelse</h2><p>ØkonomiKalk gir kun estimater og generell informasjon. Tjenesten erstatter ikke rådgivning fra Skatteetaten, regnskapsfører, revisor, advokat, bank eller annen kvalifisert rådgiver. Faktiske tall kan avvike.</p></section>
 </main>
 
-<div id="paywallModal" class="modal hidden"><div class="modal-card"><button id="closeModal" class="modal-close" type="button">×</button><p class="eyebrow">Næring</p><h2>Lås opp næringsverktøy</h2><p>Gir tilgang til skatteberegning næring, timespris, faktura, rapport, PDF, lokal lagring og dokumentasjonshuskelister.</p><div class="price small">199 kr</div><button id="modalUnlock" class="btn primary" type="button">Kjøp tilgang 199 kr</button><p class="fineprint">Engangsbeløp. Ingen abonnement. Betaling håndteres sikkert med Stripe Checkout.</p><div class="license-login"><h3>Har du allerede kjøpt?</h3><p class="fineprint">Skriv inn lisenskoden din for å åpne næringsverktøy på denne enheten.</p><label>Lisenskode<input type="text" id="licenseCodeInput" autocomplete="off" placeholder="OK-XXXX-XXXX"></label><button id="licenseUnlock" class="btn secondary" type="button">Åpne med lisenskode</button><p id="licenseStatus" class="fineprint"></p></div></div></div>
+<div id="paywallModal" class="modal hidden"><div class="modal-card"><button id="closeModal" class="modal-close" type="button">×</button><p class="eyebrow">Næring</p><h2>Lås opp næringsverktøy</h2><p>Gir tilgang til skatteberegning næring, timespris, faktura, driftsbudsjett, likviditetsbudsjett, rapport, PDF, lokal lagring og dokumentasjonshuskelister.</p><div class="price small">199 kr</div><button id="modalUnlock" class="btn primary" type="button">Kjøp tilgang 199 kr</button><p class="fineprint">Engangsbeløp. Ingen abonnement. Betaling håndteres sikkert med Stripe Checkout.</p><div class="license-login"><h3>Har du allerede kjøpt?</h3><p class="fineprint">Skriv inn lisenskoden din for å åpne næringsverktøy på denne enheten.</p><label>Lisenskode<input type="text" id="licenseCodeInput" autocomplete="off" placeholder="OK-XXXX-XXXX"></label><button id="licenseUnlock" class="btn secondary" type="button">Åpne med lisenskode</button><p id="licenseStatus" class="fineprint"></p></div></div></div>
 <footer class="footer"><p>© 2026 ØkonomiKalk</p><p><a href="/om/">Om</a> · <a href="/personvern/">Personvern</a> · <a href="/vilkar/">Vilkår</a> · <a href="/ansvarsfraskrivelse/">Ansvarsfraskrivelse</a> · <a href="/kontakt/">Kontakt</a></p></footer>
 <script src="salary-data.js"></script>
 <script src="app.js"></script>
