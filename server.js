@@ -58,7 +58,7 @@ function base64UrlDecode(value) {
   return Buffer.from(String(value), "base64url").toString("utf8");
 }
 
-const LICENSE_PRODUCT = "okonomikalk_naering_199";
+const LICENSE_PRODUCT = "okonomikalk_naering_299";
 const LICENSE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 function normalizeLicenseCode(code) {
@@ -218,9 +218,9 @@ app.post("/api/create-checkout-session", async (req, res) => {
             currency: "nok",
             product_data: {
               name: "ØkonomiKalk Næring",
-              description: "Engangstilgang til næringsverktøy: skatteberegning, fradrag, timespris, faktura, rapport og PDF."
+              description: "Engangstilgang til næringsverktøy: skatteberegning, fradrag, timespris, faktura, driftsbudsjett, likviditetsbudsjett, kjørebok, rapport og PDF."
             },
-            unit_amount: 19900
+            unit_amount: 29900
           },
           quantity: 1
         }

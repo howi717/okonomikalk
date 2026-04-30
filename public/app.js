@@ -37,7 +37,7 @@ async function startPremiumCheckout(){
     const response = await fetch("/api/create-checkout-session", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ product: "okonomikalk_naering_199" })
+      body: JSON.stringify({ product: "okonomikalk_naering_299" })
     });
 
     if (!response.ok) {
