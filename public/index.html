@@ -117,7 +117,7 @@
     <section id="tab-lonnskatt" class="tab-panel active-tab" data-tab-panel="calc">
         <div class="calculator-layout">
           <div class="panel input-panel">
-            <div class="section-title"><h2>Skatt for lønnsmottaker 2025</h2></div>
+            <div class="section-title"><h2>Skatt for lønnsmottaker 2026</h2><p>Satser og beregninger gjelder skatteåret 2026.</p></div>
             <form class="form">
               <fieldset><legend>Inntekt</legend>
                 <label>Brutto årsinntekt<input type="number" id="empGrossIncome" min="0" step="1000" value="650000"></label>
@@ -125,13 +125,11 @@
               </fieldset>
               <fieldset><legend>Fradrag</legend>
                 <p class="info-help-text">Klikke på info for utfyllende hjelp til riktig beløp</p>
-                <label>Reisefradrag hjem-arbeid<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Her kan du regne beløp som overstiger kr. 14000 pr år dersom du har reisevei t/r som er over 27 km. Da regnes det en sats på 1.90 kr pr km uansett transportmiddel. Bom og ferje kan taes med dersom det sparer deg min 2 timer i reisetid</span></span><input type="number" id="empTravelDeduction" min="0" step="500" value="0"></label>
+                <label>Reisefradrag hjem-arbeid<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Sats: 1,90 kr per km.<br>Egenandel: 14 000 kr.<br>Avstandskrav: Minimum 37 km t/r for å få fradrag (basert på ca. 230 arbeidsdager).<br>Bompenger/ferje: Kan tillegges dersom merutgiftene overstiger 3 300 kr og er nødvendig (sparer minst 2 timer reisetid).</span></span><input type="number" id="empTravelDeduction" min="0" step="500" value="0"></label>
                 <label>Gjeldsrenter/renteutgifter<input type="number" id="empInterestDeduction" min="0" step="500" value="0"></label>
                 <label>IPS / pensjonssparing<input type="number" id="empIpsDeduction" min="0" step="500" value="0"></label>
                 <label>Fagforeningskontingent<input type="number" id="empUnionDeduction" min="0" step="500" value="0"></label>
-                <label>Foreldrefradrag/barnepass<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Fradraget gis i alminnelig inntekt med inntil 15 000 kroner for ett barn og med inntil 10 000 kroner for hvert ytterligere barn.
-
-For barn 12 år og eldre med særskilt behov for omsorg og pleie videreføres grensene på 25 000 kroner for ett barn, og 15 000 kroner per barn utover det første</span></span><input type="number" id="empChildcareDeduction" min="0" step="500" value="0"></label>
+                <label>Foreldrefradrag/barnepass<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Generelle satser: 15 000 kr (1. barn), 10 000 kr (ytterligere barn).<br>Særskilte behov (12 år+): 25 000 kr (1. barn), 15 000 kr (ytterligere barn).<br>Formål: Dekker utgifter til pass og stell (barnehage, SFO, barnepass, kjøring).<br>Dokumentasjon: Utgifter må kunne dokumenteres.</span></span><input type="number" id="empChildcareDeduction" min="0" step="500" value="0"></label>
                 <label>Annet fradrag<input type="number" id="empOtherDeduction" min="0" step="500" value="0"></label>
                 <p class="fineprint form-note">Formue er ikke tatt med her</p>
               </fieldset>
@@ -170,7 +168,7 @@ For barn 12 år og eldre med særskilt behov for omsorg og pleie videreføres gr
           <section id="tab-bizskatt" class="tab-panel active-tab" data-tab-panel="biz">
             <div class="calculator-layout">
               <div class="panel input-panel">
-                <div class="section-title"><p class="eyebrow">Næring</p><h2>Skatteberegning næring</h2><p>Alle næringstall bør føres eks. mva.</p><p class="info-help-text">Klikke på info for utfyllende hjelp til riktig beløp</p></div>
+                <div class="section-title"><p class="eyebrow">Næring</p><h2>Skatteberegning næring 2026</h2><p>Alle næringstall bør føres eks. mva. Satser og beregninger gjelder skatteåret 2026.</p><p class="info-help-text">Klikke på info for utfyllende hjelp til riktig beløp</p></div>
                 <form class="form">
                   <fieldset><legend>Inntekter</legend>
                     <label>Omsetning<input type="number" id="bizRevenue" min="0" step="1000" value="600000"></label>
@@ -191,12 +189,10 @@ For barn 12 år og eldre med særskilt behov for omsorg og pleie videreføres gr
                   </fieldset>
                   <fieldset><legend>Private/personlige fradrag</legend>
                     <label>Gjeldsrenter/renteutgifter<input type="number" id="bizDedInterest" min="0" step="500" value="0"></label>
-                    <label>Reisefradrag hjem-arbeid<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Her kan du regne beløp som overstiger kr. 14000 pr år dersom du har reisevei t/r som er over 27 km. Da regnes det en sats på 1.90 kr pr km uansett transportmiddel. Bom og ferje kan taes med dersom det sparer deg min 2 timer i reisetid</span></span><input type="number" id="bizDedTravel" min="0" step="500" value="0"></label>
+                    <label>Reisefradrag hjem-arbeid<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Sats: 1,90 kr per km.<br>Egenandel: 14 000 kr.<br>Avstandskrav: Minimum 37 km t/r for å få fradrag (basert på ca. 230 arbeidsdager).<br>Bompenger/ferje: Kan tillegges dersom merutgiftene overstiger 3 300 kr og er nødvendig (sparer minst 2 timer reisetid).</span></span><input type="number" id="bizDedTravel" min="0" step="500" value="0"></label>
                     <label>Fagforening / yrkesorganisasjon<input type="number" id="bizDedUnion" min="0" step="500" value="0"></label>
                     <label>IPS / pensjonssparing<input type="number" id="bizDedIps" min="0" step="500" value="0"></label>
-                    <label>Foreldrefradrag/barnepass<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Fradraget gis i alminnelig inntekt med inntil 15 000 kroner for ett barn og med inntil 10 000 kroner for hvert ytterligere barn.
-
-For barn 12 år og eldre med særskilt behov for omsorg og pleie videreføres grensene på 25 000 kroner for ett barn, og 15 000 kroner per barn utover det første</span></span><input type="number" id="bizDedChildcare" min="0" step="500" value="0"></label>
+                    <label>Foreldrefradrag/barnepass<span class="info-wrap"><button class="info-btn" type="button" data-info-toggle>Info</button><span class="info-popover">Generelle satser: 15 000 kr (1. barn), 10 000 kr (ytterligere barn).<br>Særskilte behov (12 år+): 25 000 kr (1. barn), 15 000 kr (ytterligere barn).<br>Formål: Dekker utgifter til pass og stell (barnehage, SFO, barnepass, kjøring).<br>Dokumentasjon: Utgifter må kunne dokumenteres.</span></span><input type="number" id="bizDedChildcare" min="0" step="500" value="0"></label>
                     <label>Andre fradrag<input type="number" id="bizDedOther" min="0" step="500" value="0"></label>
                     <p class="fineprint form-note">Avskrivinger og formue er ikke tatt med her</p>
                   </fieldset>

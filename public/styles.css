@@ -1614,7 +1614,7 @@ body:not(.premium-unlocked) #tab-selvstendig::after {
 }
 
 
-/* v39: layout fixes for budgets, mileage and invoice */
+/* v39/v41: layout fixes for budgets, mileage and invoice */
 .business-budget-wrap {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
