@@ -310,12 +310,13 @@ function updateMileageSummary(){
   const km=rows.reduce((a,r)=>a+r.km,0);
   const amount=km*MILEAGE_RATE;
   const summary=document.getElementById("mileageSummary");
-  if(summary)summary.innerHTML=`<div class="kpi"><span>Sum kilometer</span><strong>${nf.format(km)} km</strong></div><div class="kpi"><span>Sats</span><strong>${kr(MILEAGE_RATE)} per km</strong></div><div class="kpi full"><span>Skattefritt beløp</span><strong>${kr(amount)}</strong></div>`;
+  const rateText=new Intl.NumberFormat("no-NO",{minimumFractionDigits:2,maximumFractionDigits:2}).format(MILEAGE_RATE);
+  if(summary)summary.innerHTML=`<div class="kpi"><span>Sum kilometer</span><strong>${nf.format(km)} km</strong></div><div class="kpi"><span>Sats</span><strong>${rateText} kr per km</strong></div><div class="kpi"><span>Skattefritt beløp</span><strong>${kr(amount)}</strong></div>`;
 }
 function collectMileageCsv(){
   const rows=readMileageRows();
   const km=rows.reduce((a,r)=>a+r.km,0),amount=km*MILEAGE_RATE;
-  return [["Firmanavn",document.getElementById("mileageCompany")?.value||""],["Navn eier bil",document.getElementById("mileageOwner")?.value||""],["Regnr.",document.getElementById("mileageReg")?.value||""],[],["Dato","Kjørt fra","Kjørt til","Formål","Antall km"],...rows.map(r=>[r.date,r.from,r.to,r.purpose,r.km]),[],["Sum kilometer",km],["Sats per km",MILEAGE_RATE],["Skattefritt beløp",Math.round(amount)]];
+  return [["Firmanavn",document.getElementById("mileageCompany")?.value||""],["Navn eier bil",document.getElementById("mileageOwner")?.value||""],["Regnr.",document.getElementById("mileageReg")?.value||""],[],["Dato","Kjørt fra","Kjørt til","Formål","Antall km"],...rows.map(r=>[r.date,r.from,r.to,r.purpose,r.km]),[],["Sum kilometer",km],["Sats per km","3,50"],["Skattefritt beløp",Math.round(amount)]];
 }
 function initMileageLog(){
   if(!document.getElementById("mileageRows"))return;

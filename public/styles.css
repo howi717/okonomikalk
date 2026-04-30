@@ -1612,3 +1612,103 @@ body:not(.premium-unlocked) #tab-selvstendig::after {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* v39: layout fixes for budgets, mileage and invoice */
+.business-budget-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.business-budget-table {
+  min-width: 1680px;
+}
+
+.business-budget-table th:first-child,
+.business-budget-table td:first-child {
+  width: 220px;
+  min-width: 220px;
+}
+
+.business-budget-table th:not(:first-child),
+.business-budget-table td:not(:first-child) {
+  width: 112px;
+  min-width: 112px;
+}
+
+.business-budget-table input {
+  width: 100%;
+  min-width: 92px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+#mileageSummary {
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  align-items: start;
+}
+
+#mileageSummary .kpi.full {
+  grid-column: auto;
+}
+
+.invoice-table-wrap {
+  overflow-x: hidden;
+}
+
+.invoice-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.invoice-table th,
+.invoice-table td {
+  white-space: nowrap;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.invoice-table th {
+  font-size: .82rem;
+  letter-spacing: -.01em;
+}
+
+.invoice-table th:first-child,
+.invoice-table td:first-child {
+  width: 38%;
+  text-align: left;
+}
+
+.invoice-table th:nth-child(2),
+.invoice-table td:nth-child(2) {
+  width: 10%;
+}
+
+.invoice-table th:nth-child(3),
+.invoice-table td:nth-child(3) {
+  width: 18%;
+}
+
+.invoice-table th:nth-child(4),
+.invoice-table td:nth-child(4) {
+  width: 11%;
+}
+
+.invoice-table th:nth-child(5),
+.invoice-table td:nth-child(5) {
+  width: 23%;
+}
+
+@media (max-width: 900px) {
+  .business-budget-table {
+    min-width: 1600px;
+  }
+
+  #mileageSummary {
+    grid-template-columns: 1fr;
+  }
+
+  .invoice-table {
+    min-width: 620px;
+  }
+}
