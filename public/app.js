@@ -95,11 +95,11 @@ function showLicenseNotice(licenseCode){
     box.className="license-notice";
     document.body.appendChild(box);
   }
-  box.innerHTML=`<div class="license-notice-card"><button class="modal-close" id="closeLicenseNotice" type="button">×</button><p class="eyebrow">Takk for kjøpet</p><h2>Næringsverktøy er åpnet</h2><p>Ta vare på lisenskoden. Den kan brukes for å åpne næringsverktøy på mobil, nettbrett eller en annen nettleser.</p><input class="license-code-output" readonly value="${licenseCode}"><div class="form-actions"><button class="btn primary" id="copyLicenseCode" type="button">Kopier lisenskode</button><button class="btn ghost" id="continueAfterLicense" type="button">Fortsett</button></div><p class="fineprint">Koden lagres også lokalt i denne nettleseren.</p></div>`;
+  box.innerHTML=`<div class="license-notice-card"><button class="modal-close" id="closeLicenseNotice" type="button">×</button><p class="eyebrow">Takk for kjøpet</p><h2>Næringsverktøy er åpnet</h2><p>Ta godt vare på lisenskoden din. Den kan brukes for å åpne næringsverktøy på mobil, nettbrett eller en annen nettleser.</p><input class="license-code-output" readonly value="${licenseCode}"><div class="form-actions"><button class="btn primary" id="copyLicenseCode" type="button">Kopier lisenskode</button><button class="btn ghost" id="continueAfterLicense" type="button">Fortsett</button></div><p class="fineprint">Når du trykker “Kopier lisenskode”, blir koden kopiert til utklippstavlen. Den ligger der bare til du kopierer noe annet, så det er lurt å skrive den ned eller lagre den et trygt sted. Koden lagres også lokalt i denne nettleseren.</p></div>`;
   box.classList.remove("hidden");
   document.getElementById("closeLicenseNotice").addEventListener("click",()=>box.classList.add("hidden"));
   document.getElementById("continueAfterLicense").addEventListener("click",()=>box.classList.add("hidden"));
-  document.getElementById("copyLicenseCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(licenseCode);alert("Lisenskoden er kopiert.")}catch{alert("Kopier lisenskoden manuelt.")}});
+  document.getElementById("copyLicenseCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(licenseCode);alert("Lisenskoden er kopiert til utklippstavlen. Husk å skrive den ned eller lagre den et trygt sted.")}catch{alert("Kopier lisenskoden manuelt.")}});
 }
 
 async function unlockWithLicense(){
