@@ -212,6 +212,9 @@ app.post("/api/create-checkout-session", async (req, res) => {
       payment_method_types: ["card"],
       allow_promotion_codes: false,
       billing_address_collection: "auto",
+branding_settings: {
+  display_name: "ØkonomiKalk",
+},
       line_items: [
         {
           price_data: {
@@ -226,7 +229,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
         }
       ],
       success_url: `${PUBLIC_URL}/?session_id={CHECKOUT_SESSION_ID}#kalkulatorer`,
-      cancel_url: `${PUBLIC_URL}/#kalkulatorer`,
+      cancel_url: `${PUBLIC_URL}/?payment_cancelled=1#hjem`,
       metadata: {
         product: LICENSE_PRODUCT
       }
