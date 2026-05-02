@@ -1712,3 +1712,48 @@ body:not(.premium-unlocked) #tab-selvstendig::after {
     min-width: 620px;
   }
 }
+
+
+/* v46: SEO guide hub grouped by topic */
+.guide-cluster-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.guide-cluster {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: rgba(255,255,255,.94);
+}
+
+.guide-cluster h3 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+  letter-spacing: -.03em;
+}
+
+.guide-cluster a {
+  display: block;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+  color: var(--primary-2);
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.guide-cluster a:hover {
+  background: #e7f7f3;
+}
+
+@media (max-width: 860px) {
+  .guide-cluster-grid {
+    grid-template-columns: 1fr;
+  }
+}
