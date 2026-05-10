@@ -1779,3 +1779,91 @@ body:not(.premium-unlocked) #tab-selvstendig::after {
 #invoicePreview .invoice-table td:nth-child(n+2) {
   white-space: nowrap !important;
 }
+
+/* v48: kompakt forside slik at heading og Privat/Næring-boksene synes på samme skjerm */
+#hjem .hero {
+  padding: clamp(18px, 3.5vh, 34px) 0 clamp(6px, 1.5vh, 12px) !important;
+}
+
+#hjem .hero-text {
+  padding: clamp(10px, 2vh, 18px) clamp(8px, 2vw, 18px) !important;
+}
+
+#hjem .eyebrow {
+  margin-bottom: 7px;
+}
+
+#hjem h1 {
+  font-size: clamp(2.25rem, 5.8vw, 4.65rem);
+  line-height: .96;
+}
+
+#hjem .lead {
+  margin: 12px auto 0;
+  line-height: 1.42;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+}
+
+#hjem .section.cards-grid.center-cards {
+  margin-top: 8px !important;
+  margin-bottom: 26px;
+}
+
+#hjem .center-cards {
+  max-width: 1120px;
+}
+
+#hjem .mini-card {
+  padding: clamp(16px, 2vw, 22px);
+}
+
+#hjem .mini-card .eyebrow {
+  margin-bottom: 6px;
+}
+
+#hjem .mini-card h2 {
+  font-size: clamp(1.35rem, 2.3vw, 1.9rem);
+  margin-bottom: 10px;
+}
+
+#hjem .feature-list {
+  line-height: 1.43;
+  font-size: .94rem;
+}
+
+#hjem .feature-list li {
+  margin: 2px 0;
+}
+
+#hjem .business-card-layout {
+  gap: 16px;
+}
+
+#hjem .business-card-offer {
+  align-self: stretch;
+  padding: 14px;
+}
+
+#hjem .business-card-offer .offer-title {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+#hjem .business-card-offer .fineprint {
+  margin: 0 0 14px;
+  line-height: 1.35;
+}
+
+@media (max-width: 960px) {
+  #hjem .hero {
+    padding-top: 16px !important;
+  }
+
+  #hjem .section.cards-grid.center-cards {
+    margin-top: 6px !important;
+  }
+
+  #hjem .feature-list {
+    line-height: 1.5;
+  }
+}
