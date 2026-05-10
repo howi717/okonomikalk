@@ -1757,3 +1757,25 @@ body:not(.premium-unlocked) #tab-selvstendig::after {
     grid-template-columns: 1fr;
   }
 }
+
+/* v47: fix invoice preview description wrapping */
+#invoicePreview .invoice-table {
+  table-layout: fixed;
+}
+
+#invoicePreview .invoice-table th:first-child,
+#invoicePreview .invoice-table td:first-child {
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+#invoicePreview .invoice-table td {
+  vertical-align: top;
+}
+
+#invoicePreview .invoice-table th:nth-child(n+2),
+#invoicePreview .invoice-table td:nth-child(n+2) {
+  white-space: nowrap !important;
+}

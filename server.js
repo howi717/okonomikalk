@@ -183,7 +183,7 @@ app.post("/api/stripe-webhook", express.raw({ type: "application/json" }), async
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
-    console.log("Premium purchase completed:", {
+    console.log("ØkonomiKalk purchase completed:", {
       sessionId: session.id,
       customerEmail: session.customer_details?.email,
       amountTotal: session.amount_total,
@@ -212,9 +212,9 @@ app.post("/api/create-checkout-session", async (req, res) => {
       payment_method_types: ["card"],
       allow_promotion_codes: false,
       billing_address_collection: "auto",
-branding_settings: {
-  display_name: "ØkonomiKalk",
-},
+      branding_settings: {
+        display_name: "ØkonomiKalk"
+      },
       line_items: [
         {
           price_data: {
@@ -293,9 +293,9 @@ app.post("/api/verify-license", async (req, res) => {
 });
 
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, app: "okonomikalk", version: "v45" });
+  res.json({ ok: true, app: "okonomikalk", version: "v47", siteLock: SITE_LOCK_ENABLED, price: 299 });
 });
 
 app.listen(PORT, () => {
-  console.log(`ØkonomiKalk v45 running on ${PUBLIC_URL}`);
+  console.log(`ØkonomiKalk v47 running on ${PUBLIC_URL}`);
 });
