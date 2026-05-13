@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Er timesprisen din for lav? – Økonomikalk</title>
+  <meta name="description" content="Finn anbefalt timespris eks. mva med ett spørsmål av gangen." />
+  <link rel="stylesheet" href="landing-pages.css" />
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">Ø</span><span>Økonomikalk</span></a>
+  <a class="toplink" href="index.html#kalkulatorer">Til Økonomikalk</a>
+</header>
+<main>
+
+<section class="hero">
+  <p class="eyebrow">Landingsside</p>
+  <h1>Er timesprisen din for lav?</h1>
+  <p class="lead">Svar på noen få spørsmål. Til slutt får du oppsummering, kan justere tallene og gå videre til full beregning.</p>
+</section>
+<section class="panel">
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <section class="step active">
+    <h2>Hva ønsker du å sitte igjen med i året?</h2>
+    <p class="help">Legg inn ønsket årlig inntekt før privat skatt.</p>
+    <label>Ønsket inntekt per år
+      <input id="desiredIncome" type="number" value="650000" min="0" step="1000">
+    </label>
+    <div class="actions">
+      
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye har du i driftskostnader per år?</h2>
+    <p class="help">Ta med programvare, utstyr, reise, forsikring, pensjon og annet.</p>
+    <label>Driftskostnader per år
+      <input id="costs" type="number" value="159000" min="0" step="1000">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mange timer kan du fakturere per uke?</h2>
+    <p class="help">Ikke alle arbeidstimer er fakturerbare. Administrasjon, salg og regnskap tar også tid.</p>
+    <label>Fakturerbare timer per uke
+      <input id="hoursPerWeek" type="number" value="25" min="1" step="1">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mange feriedager vil du ha?</h2>
+    <p class="help">Vanlig ferie er ofte rundt 25 virkedager.</p>
+    <label>Feriedager per år
+      <input id="vacationDays" type="number" value="25" min="0" step="1">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Vil du legge inn ekstra buffer?</h2>
+    <p class="help">Buffer kan dekke sykdom, ledig tid, uforutsette kostnader og prisforhandling.</p>
+    <label>Ekstra buffer
+      <select id="bufferPercent"><option value="0">Ingen buffer</option><option value="5">5 % buffer</option><option value="10" selected>10 % buffer</option><option value="15">15 % buffer</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Se resultat</button>
+    </div>
+  </section>
+
+</section>
+<section id="resultCard" class="result-card">
+  <div id="resultContent"></div>
+</section>
+
+</main>
+<script src="landing-pages.js"></script>
+<script>initTimespris();</script>
+</body>
+</html>

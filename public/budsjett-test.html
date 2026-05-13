@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Går budsjettet ditt i pluss? – Økonomikalk</title>
+  <meta name="description" content="Rask landingsside for privat budsjett." />
+  <link rel="stylesheet" href="landing-pages.css" />
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">Ø</span><span>Økonomikalk</span></a>
+  <a class="toplink" href="index.html#kalkulatorer">Til Økonomikalk</a>
+</header>
+<main>
+
+<section class="hero">
+  <p class="eyebrow">Landingsside</p>
+  <h1>Går budsjettet ditt i pluss?</h1>
+  <p class="lead">Svar på noen få spørsmål og se om privatøkonomien går i pluss eller minus.</p>
+</section>
+<section class="panel">
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <section class="step active">
+    <h2>Hvor mye får du utbetalt per måned?</h2>
+    <p class="help">Ta med lønn og andre faste inntekter.</p>
+    <label>Utbetalt inntekt per måned
+      <input id="income" type="number" value="42000" min="0" step="500">
+    </label>
+    <div class="actions">
+      
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye går til bolig?</h2>
+    <p class="help">Huslån, husleie, felleskostnader og eventuelt kommunale avgifter.</p>
+    <label>Bolig/lån/husleie
+      <input id="housing" type="number" value="15000" min="0" step="500">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye bruker du på mat og dagligvarer?</h2>
+    <p class="help">Mat, husholdning og vanlige dagligvarer.</p>
+    <label>Mat og dagligvarer
+      <input id="food" type="number" value="7500" min="0" step="500">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye går til andre utgifter?</h2>
+    <p class="help">Strøm, bil, abonnement, mobil, klær, ferie og annet.</p>
+    <label>Andre utgifter
+      <input id="other" type="number" value="11000" min="0" step="500">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye sparer du per måned?</h2>
+    <p class="help">Buffer, fond, pensjon eller annen sparing.</p>
+    <label>Sparing
+      <input id="savings" type="number" value="3000" min="0" step="500">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Se resultat</button>
+    </div>
+  </section>
+
+</section>
+<section id="resultCard" class="result-card">
+  <div id="resultContent"></div>
+</section>
+
+</main>
+<script src="landing-pages.js"></script>
+<script>initBudget();</script>
+</body>
+</html>

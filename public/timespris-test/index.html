@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Er timesprisen din for lav? – Økonomikalk</title>
+  <meta name="description" content="Finn anbefalt timespris eks. mva med åtte spørsmål." />
+  <link rel="stylesheet" href="/microsite.css" />
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/"><span class="brand-mark">Ø</span><span>Økonomikalk</span></a>
+  <a class="toplink" href="/">Til forsiden</a>
+</header>
+<main>
+<section class="hero">
+  <h1>Er timesprisen din for lav?</h1>
+  <p class="lead">Svar på åtte korte spørsmål. Til slutt får du oppsummering, kan justere tallene og gå videre til Økonomikalk.</p>
+</section>
+<section class="panel">
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <section class="step active">
+    <h2>Hva ønsker du å sitte igjen med i året?</h2>
+    <p class="help">Legg inn ønsket årlig inntekt før privat skatt.</p>
+    <label>Ønsket inntekt per år
+      <input id="desiredIncome" type="number" value="650000" min="0" step="1000">
+    </label>
+    <div class="actions">
+      
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye bruker du på programvare per år?</h2>
+    <p class="help">Regnskap, kontor, design, AI, hosting, domene eller andre digitale tjenester.</p>
+    <label>Programvare
+      <input id="software" type="number" value="18000" min="0" step="1000">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye bruker du på verktøy / utstyr per år?</h2>
+    <p class="help">PC, mobil, kamera, håndverktøy, kontorutstyr eller annet.</p>
+    <label>Verktøy / utstyr
+      <input id="equipment" type="number" value="25000" min="0" step="1000">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye bruker du på leie av lokaler per år?</h2>
+    <p class="help">Kontor, coworking, lager, verksted eller behandlingsrom.</p>
+    <label>Leie lokaler
+      <input id="rent" type="number" value="0" min="0" step="1000">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye har du i reisekostnader per år?</h2>
+    <p class="help">Transport, parkering, bom, drivstoff, tog, fly eller overnatting.</p>
+    <label>Reisekostnader
+      <input id="travel" type="number" value="12000" min="0" step="1000">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye bruker du på markedsføring per år?</h2>
+    <p class="help">Annonser, nettside, foto, video, grafisk arbeid eller kampanjer.</p>
+    <label>Markedsføring
+      <input id="marketing" type="number" value="15000" min="0" step="1000">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye bør du sette av til pensjon og forsikring?</h2>
+    <p class="help">Her kan du ta med både pensjon og forsikringer for enkel beregning.</p>
+    <label>Pensjon + forsikring
+      <input id="pension" type="number" value="40000" min="0" step="1000"><input id="insurance" type="hidden" value="12000">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye bør du sette av til sykepenger og hvor mange timer fakturerer du?</h2>
+    <p class="help">Sykepengebuffer påvirker prisen. Timer og ferie brukes for å finne timespris.</p>
+    <label>Sykepenger, timer, ferie og buffer
+      <input id="sickpay" type="number" value="25000" min="0" step="1000"><input id="hoursPerWeek" type="number" value="25" min="1" step="1" aria-label="Fakturerbare timer per uke"><input id="vacationDays" type="number" value="25" min="0" step="1" aria-label="Feriedager per år"><select id="bufferPercent"><option value="0">Ingen ekstra buffer</option><option value="5">5 % buffer</option><option value="10" selected>10 % buffer</option><option value="15">15 % buffer</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Se resultat</button>
+    </div>
+  </section>
+
+</section>
+<section id="resultCard" class="result-card">
+  <div id="resultContent"></div>
+</section>
+</main>
+<script src="/microsite.js"></script>
+<script>initTimespris();</script>
+</body>
+</html>

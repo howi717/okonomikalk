@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Har du glemt fradrag i ENK? – Økonomikalk</title>
+  <meta name="description" content="Rask sjekk av mulige fradragsområder for enkeltpersonforetak." />
+  <link rel="stylesheet" href="/microsite.css" />
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/"><span class="brand-mark">Ø</span><span>Økonomikalk</span></a>
+  <a class="toplink" href="/">Til forsiden</a>
+</header>
+<main>
+<section class="hero">
+  <h1>Har du glemt fradrag i ENK?</h1>
+  <p class="lead">Svar på åtte korte spørsmål og få en oppsummering av områder du bør kontrollere.</p>
+</section>
+<section class="panel">
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <section class="step active">
+    <h2>Har du kostnader til programvare?</h2>
+    <p class="help">For eksempel regnskapsprogram, kontorprogram, designprogram, AI-verktøy eller fagsystemer.</p>
+    <label>Programvare
+      <select id="software"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Bruker du verktøy eller utstyr i næringen?</h2>
+    <p class="help">For eksempel PC, mobil, kamera, håndverktøy, kontorutstyr eller annet arbeidsutstyr.</p>
+    <label>Verktøy / utstyr
+      <select id="equipment"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Leier du lokaler?</h2>
+    <p class="help">For eksempel kontor, coworking, verksted, lager eller behandlingsrom.</p>
+    <label>Leie lokaler
+      <select id="rent"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Har du reisekostnader?</h2>
+    <p class="help">For eksempel transport, parkering, bom, drivstoff, tog, fly eller overnatting i forbindelse med arbeid.</p>
+    <label>Reisekostnader
+      <select id="travel"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Har du markedsføringskostnader?</h2>
+    <p class="help">For eksempel annonser, nettside, domene, foto, video, grafisk arbeid eller kampanjer.</p>
+    <label>Markedsføring
+      <select id="marketing"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Setter du av penger til pensjon?</h2>
+    <p class="help">Pensjon er en viktig kostnad mange selvstendige glemmer å regne inn.</p>
+    <label>Pensjon
+      <select id="pension"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Har du forsikringer knyttet til virksomheten?</h2>
+    <p class="help">For eksempel ansvarsforsikring, utstyrsforsikring eller andre næringsrelaterte forsikringer.</p>
+    <label>Forsikring
+      <select id="insurance"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Har du tenkt på sykepenger eller sykepengebuffer?</h2>
+    <p class="help">Selvstendige bør ofte sette av penger til perioder uten inntekt ved sykdom.</p>
+    <label>Sykepenger
+      <select id="sickpay"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Se resultat</button>
+    </div>
+  </section>
+
+</section>
+<section id="resultCard" class="result-card">
+  <div id="resultContent"></div>
+</section>
+</main>
+<script src="/microsite.js"></script>
+<script>initFradrag();</script>
+</body>
+</html>

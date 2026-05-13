@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hvor mye bør du sette av til skatt? – Økonomikalk</title>
+  <meta name="description" content="Rask landingsside for skattebuffer som selvstendig næringsdrivende." />
+  <link rel="stylesheet" href="landing-pages.css" />
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">Ø</span><span>Økonomikalk</span></a>
+  <a class="toplink" href="index.html#kalkulatorer">Til Økonomikalk</a>
+</header>
+<main>
+
+<section class="hero">
+  <p class="eyebrow">Landingsside</p>
+  <h1>Hvor mye bør du sette av til skatt?</h1>
+  <p class="lead">Svar på ett og ett spørsmål og få et grovt forslag til hvor mye du bør sette av til skatt.</p>
+</section>
+<section class="panel">
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <section class="step active">
+    <h2>Hvor mye forventer du å fakturere i år?</h2>
+    <p class="help">Oppgi omsetning eks. mva.</p>
+    <label>Fakturert inntekt eks. mva
+      <input id="revenue" type="number" value="700000" min="0" step="1000">
+    </label>
+    <div class="actions">
+      
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye forventer du i kostnader?</h2>
+    <p class="help">Ta med næringskostnader som utstyr, programvare, reise og forsikring.</p>
+    <label>Forventede kostnader
+      <input id="costs" type="number" value="150000" min="0" step="1000">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Se resultat</button>
+    </div>
+  </section>
+
+</section>
+<section id="resultCard" class="result-card">
+  <div id="resultContent"></div>
+</section>
+
+</main>
+<script src="landing-pages.js"></script>
+<script>initSkattebuffer();</script>
+</body>
+</html>

@@ -65,3 +65,44 @@ Se `PAYMENT_SETUP.md` for mer.
   - Budsjett privat
 - De brede annonseboksene under overskriften er fjernet fra disse sidene.
 - Sideannonser vises bare på aktiv hovedside og skjules på smalere skjermer.
+
+## v49 microsites / landingssider
+
+Kirurgisk tillegg basert på okonomikalk-v48-kompakt-forside:
+
+- /timespris-test/
+- /skattebuffer-test/
+- /fradrag-enk-test/
+- /budsjett-test/
+- /lanekostnad-test/
+
+Eksisterende forside, overskrifter, kalkulatorer, premium og prosjektstruktur er ikke endret.
+Kun nye microsite-filer er lagt til:
+- public/microsite.css
+- public/microsite.js
+- fem nye mapper med index.html
+
+## v50 microsites
+
+Kirurgisk endring fra v49:
+- Alle fem microsites har nå 8 spørsmål.
+- Fradragssiden er delt opp i:
+  Programvare, Verktøy / utstyr, Leie lokaler, Reise kostnader, Markedsføring, Pensjon, Forsikring, Sykepenger.
+- CTA for fradrag sier nå: “Få full fradragsoversikt og dokumentasjonsliste i Økonomikalk”.
+- Alle CTA-knapper leder nå til forsiden `/`.
+- Ingen AdSense er lagt til eller endret.
+
+## v51 microsites teaser
+
+Kirurgisk endring fra v50:
+- Microsites gir ikke lenger full gratis beregning.
+- Etter spørsmålene vises kun kort oppsummering/teaser.
+- CTA sier at brukeren må sjekke resultat og justere tallene i Økonomikalk.
+- Alle CTA-knapper leder til forsiden `/`.
+- Ingen AdSense er lagt til eller endret.
+
+## v52 microsites teaser clean
+
+Kirurgisk endring fra v51:
+- Fjernet synlig tekst “Landingsside” fra de fem microsidene.
+- Ingen andre endringer.

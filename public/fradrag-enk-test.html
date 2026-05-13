@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Har du glemt fradrag i ENK? – Økonomikalk</title>
+  <meta name="description" content="Rask sjekk av mulige fradragsområder for enkeltpersonforetak." />
+  <link rel="stylesheet" href="landing-pages.css" />
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">Ø</span><span>Økonomikalk</span></a>
+  <a class="toplink" href="index.html#kalkulatorer">Til Økonomikalk</a>
+</header>
+<main>
+
+<section class="hero">
+  <p class="eyebrow">Landingsside</p>
+  <h1>Har du glemt fradrag i ENK?</h1>
+  <p class="lead">Svar på ett spørsmål av gangen og få en oppsummering av områder du bør kontrollere.</p>
+</section>
+<section class="panel">
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <section class="step active">
+    <h2>Har du kostnader til programvare, abonnement eller digitale verktøy?</h2>
+    <p class="help">Regnskap, nettside, domene, AI, designverktøy eller fagsystemer.</p>
+    <label>Programvare/verktøy
+      <select id="software"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Bruker du PC, mobil, kamera eller annet utstyr i næringen?</h2>
+    <p class="help">Dette kan være kostnad eller anleggsmiddel avhengig av beløp og bruk.</p>
+    <label>Utstyr
+      <select id="equipment"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Har du reise, transport, parkering, bom eller drivstoff knyttet til arbeid?</h2>
+    <p class="help">Reise og transport må kunne dokumenteres og knyttes til næring.</p>
+    <label>Reise/transport
+      <select id="travel"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Har du kostnader til markedsføring, nettside eller annonser?</h2>
+    <p class="help">Google Ads, Meta, TikTok, design, foto eller produksjon.</p>
+    <label>Markedsføring
+      <select id="marketing"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Har du forsikring, pensjon eller sykepengebuffer?</h2>
+    <p class="help">Viktige kostnader mange selvstendige glemmer i prisingen.</p>
+    <label>Forsikring/pensjon
+      <select id="insurance"><option value="yes">Ja</option><option value="no">Nei</option></select>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Se resultat</button>
+    </div>
+  </section>
+
+</section>
+<section id="resultCard" class="result-card">
+  <div id="resultContent"></div>
+</section>
+
+</main>
+<script src="landing-pages.js"></script>
+<script>initFradrag();</script>
+</body>
+</html>

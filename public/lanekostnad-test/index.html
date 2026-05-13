@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hvor tungt er lånet ditt? – Økonomikalk</title>
+  <meta name="description" content="Lånekostnad-test med åtte spørsmål." />
+  <link rel="stylesheet" href="/microsite.css" />
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/"><span class="brand-mark">Ø</span><span>Økonomikalk</span></a>
+  <a class="toplink" href="/">Til forsiden</a>
+</header>
+<main>
+<section class="hero">
+  <h1>Hvor tungt er lånet ditt?</h1>
+  <p class="lead">Svar på åtte spørsmål og se månedlig lånekostnad, rentekostnad og belastning.</p>
+</section>
+<section class="panel">
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <section class="step active">
+    <h2>Hvor mye har du i lån?</h2>
+    <p class="help">Oppgi totalt lånebeløp.</p>
+    <label>Lånebeløp
+      <input id="loanAmount" type="number" value="3000000" min="0" step="10000">
+    </label>
+    <div class="actions">
+      
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor lang betalingstid ønsker du?</h2>
+    <p class="help">Vanlig boliglån ligger ofte rundt 20–30 år.</p>
+    <label>Løpetid i år
+      <input id="years" type="number" value="25" min="1" step="1">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvilken rente vil du beregne med?</h2>
+    <p class="help">Bruk nominell rente som grovt estimat.</p>
+    <label>Rente %
+      <input id="rate" type="number" value="5.5" min="0" step="0.1">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye får du utbetalt per måned?</h2>
+    <p class="help">Bruk samlet nettoinntekt hvis lånet deles.</p>
+    <label>Utbetalt inntekt
+      <input id="income" type="number" value="50000" min="0" step="500">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Har du annen gjeld?</h2>
+    <p class="help">For eksempel billån, kredittkort eller forbrukslån.</p>
+    <label>Annen gjeld
+      <input id="currentDebt" type="number" value="0" min="0" step="1000">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor mye sparer du per måned?</h2>
+    <p class="help">Fast sparing, fond, buffer eller ekstra nedbetaling.</p>
+    <label>Sparing per måned
+      <input id="savings" type="number" value="3000" min="0" step="500">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Hvor stor buffer har du?</h2>
+    <p class="help">Penger tilgjengelig hvis renten stiger eller inntekten faller.</p>
+    <label>Bufferkonto
+      <input id="buffer" type="number" value="50000" min="0" step="1000">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Neste</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2>Andre lånekostnader per måned?</h2>
+    <p class="help">Termingebyr, forsikringer eller andre kostnader knyttet til lånet.</p>
+    <label>Andre lånekostnader
+      <input id="extraCosts" type="number" value="0" min="0" step="100">
+    </label>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-back>Tilbake</button>
+      <button class="btn primary" type="button" data-next>Se resultat</button>
+    </div>
+  </section>
+
+</section>
+<section id="resultCard" class="result-card">
+  <div id="resultContent"></div>
+</section>
+</main>
+<script src="/microsite.js"></script>
+<script>initLoan();</script>
+</body>
+</html>
